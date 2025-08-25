@@ -78,7 +78,8 @@ This leads to lost knowledge, duplicated efforts, and missed opportunities for l
 
 ## 5.1 🗂️ Overall architecture
 
-TBD 
+![img.overall.png](img.overall.png)
+
 
 ## 5.2 🗂️ Deployment
 
