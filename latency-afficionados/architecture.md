@@ -361,8 +361,8 @@ Here are the key approaches:
 ### Observability & Monitoring
 - **Metrics Collection**: CloudWatch
 - **Logging**: CloudWatch Logs
-- **Synthetic Monitoring**: Custom Kotlin/Java components
-- **Real User Monitoring**: Custom implementation
+
+
 
 ## 👥 12. References
 
