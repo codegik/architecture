@@ -83,6 +83,8 @@ This leads to lost knowledge, duplicated efforts, and missed opportunities for l
 
 ## 5.2 🗂️ Deployment
 
+![img.deployment.png](img.deployment.png)
+- 
 - **Multi-AZ AWS deployment**
 - **EKS clusters** for container orchestration
 - **RDS Multi-AZ** for PostgreSQL databases
