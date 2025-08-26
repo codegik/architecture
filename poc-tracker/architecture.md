@@ -78,8 +78,7 @@ This leads to lost knowledge, duplicated efforts, and missed opportunities for l
 
 ## 5.1 🗂️ Overall architecture
 
-![img.overall.png](img.overall.png)
-
+![img.overall.architecture.png](img.overall.architecture.png)
 
 ## 5.2 🗂️ Deployment
 
