@@ -263,6 +263,102 @@ This strategy allows to migrate your RETRO game marketplace incrementally while 
 ![img.ui.migration.png](img.ui.migration.png)
 
 
+### Monolith to Microservices Migration Strategy (WIP)
+Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradually decompose the monolith while maintaining system functionality throughout the migration process.
+
+#### Pre-Migration Phase
+
+1. **Monolith Modernization First**
+* Java Version Upgrade: Migrate existing monolith from legacy Java to Latest Stable Version using OpenRewrite and GitHub Copilot.
+* Dependency Updates: Create new stack using modern framework, dependencies, and third-party libraries.
+* Code Quality: Apply modern Java patterns, remove deprecated APIs, and improve code structure.
+* Testing Foundation: Ensure most important existing feature has integration and unit test before decomposition begins.
+
+2. **Architecture Assessment**
+* Domain Boundary Analysis: Identify clear service boundaries based on business capabilities.
+* Data Dependency Mapping: Analyze database relationships and identify tightly coupled data.
+* Transaction Boundary Analysis: Identify cross-service transaction requirements.
+* API Surface Analysis: Map existing internal method calls that will become service-to-service communication.
+
+#### Migration Execution Phase 
+
+1. **Infrastructure Preparation**
+* Service Discovery Setup: Implement AWS Cloud Map or similar for microservice discovery.
+* API Gateway Configuration: Set up routing infrastructure to handle both monolith and microservice traffic.
+* Shared Infrastructure: Deploy Aurora PostgreSQL clusters, OpenSearch instances, and monitoring tools.
+* CI/CD Pipeline: Establish separate deployment pipelines for each future microservice.
+
+
+2. **Business Services implementation**
+* Comment Service
+* Review Service
+* User Service
+* etc
+
+
+#### Migration Execution Pattern for Each Service
+Step 1: Facade Creation
+Create service facade within monolith that wraps existing functionality
+Implement clean API interfaces that will become external service contracts
+Establish data access patterns that will support service extraction
+Step 2: Data Separation
+Schema Isolation: Create separate database schemas for each service domain
+Data Migration: Move relevant tables to service-specific schemas
+Referential Integrity: Handle foreign key relationships across service boundaries
+Step 3: Service Extraction
+Code Extraction: Move business logic from monolith to new Spring Boot microservice
+API Implementation: Implement REST APIs and WebSocket endpoints as needed
+Database Connection: Connect microservice to its dedicated database schema
+Step 4: Traffic Routing
+Proxy Layer: Route specific API calls to new microservice while keeping others in monolith
+Feature Flags: Use feature toggles to control which requests go to new service
+Gradual Migration: Increase traffic percentage to new service based on monitoring metrics
+Step 5: Integration Points
+Service-to-Service Communication: Implement HTTP/REST calls between services
+Event-Driven Architecture: Use AWS EventBridge for asynchronous communication
+Circuit Breakers: Implement resilience patterns for service communication
+
+#### Risk Mitigation Strategies
+Data Consistency
+Saga Pattern: Implement distributed transactions using choreography or orchestration
+Event Sourcing: Consider event sourcing for critical business processes
+Eventual Consistency: Accept eventual consistency where appropriate for performance
+Performance Considerations
+Database Connection Pooling: Optimize connection management across services
+Caching Strategy: Implement Redis caching at service boundaries
+OpenSearch Synchronization: Ensure PGsync handles multiple database schemas correctly
+Rollback Capabilities
+Feature Flags: Maintain ability to route traffic back to monolith
+Database Rollback: Keep data synchronization between old and new systems during transition
+Service Versioning: Implement API versioning for backward compatibility
+
+#### Migration Monitoring and Validation
+Technical Metrics
+Service Performance: Monitor latency, throughput, and error rates for each extracted service
+Database Performance: Track query performance and connection pool utilization
+Network Communication: Monitor service-to-service call latency and success rates
+Business Metrics
+Functional Parity: Ensure business operations continue without degradation
+Data Integrity: Validate data consistency across service boundaries
+User Experience: Monitor user-facing metrics to ensure no regression
+Migration Progress Tracking
+Service Extraction Dashboard: Track progress of each service migration
+Dependency Resolution: Monitor resolution of cross-service dependencies
+Code Coverage: Maintain test coverage as code moves between services
+
+#### Success Criteria
+Technical Success
+All services deployed independently with their own CI/CD pipelines
+Database schemas cleanly separated with appropriate service ownership
+Service-to-service communication patterns established and performing well
+Monolith reduced to minimal coordination layer or completely decommissioned
+Business Success
+No degradation in user experience during migration
+Improved deployment frequency and reduced deployment risk
+Better team autonomy with service ownership
+Enhanced system observability and debugging capabilities
+This migration strategy ensures a systematic, low-risk transition from monolith to microservices while maintaining system stability and allowing for course corrections throughout the process.
+
 ## 🧪 9. Testing strategy
 
 - Before creating new tests, we should first ensure that the existing tests are running and passing.
