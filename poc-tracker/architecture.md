@@ -113,6 +113,8 @@ TBD
 - **PostgreSQL vs NoSQL**: Relational database for ACID compliance and complex queries
 - **Kubernetes vs EC2**: EKS for better container management and scaling
 - **Real-time**: WebSockets for immediate updates vs polling for simplicity
+- **Database-per-tenant**: Strong isolation; higher ops cost; best for VIP/regulatory tenants.
+- **Auth**: OIDC/SAML (per-tenant); JWT includes tenant_id and roles.
 
 ## 6.2 🌏 For each key major component
 
