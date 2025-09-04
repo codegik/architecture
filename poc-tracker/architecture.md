@@ -78,6 +78,11 @@ This leads to lost knowledge, duplicated efforts, and missed opportunities for l
 
 ## 5.1 🗂️ Overall architecture
 
+This is an AWS-based architecture that supports multi-tenancy (Tenant A, Tenant B, …) with multi-availability zone (AZ) deployment for high availability, scalability, and isolation.
+
+The architecture combines static file delivery (frontend), API Gateway with authentication (backend APIs), and Kubernetes-managed microservices (EKS worker nodes) with supporting databases, caches, and search services.
+
+
 ![img.overall.architecture.png](img.overall.architecture.png)
 
 ## 5.2 🗂️ Deployment
@@ -118,15 +123,73 @@ TBD
 
 ## 6.2 🌏 For each key major component
 
-- **Mobile Apps**: Native Android (Kotlin) and iOS (Swift) applications
-- **API Gateway**: AWS API Gateway for request routing and rate limiting
-- **Authentication Service**: JWT-based auth with tenant isolation
-- **POC Management Service**: Core business logic for POC operations
-- **Search Service**: Elasticsearch for advanced search capabilities
-- **Real-time Service**: WebSocket server for dojo collaboration
-- **Report Service**: Background job processing for report generation
-- **Video Service**: FFmpeg-based video compilation service
-- **Notification Service**: Push notifications and email alerts
+### CloudFront + S3
+- Amazon S3 stores static files (e.g., HTML, JS, CSS, media).
+- CloudFront CDN serves those files efficiently, caching them at edge locations for low latency.
+
+### Route 53 + Global Accelerator
+- Amazon Route 53 provides DNS resolution and routing.
+- AWS Global Accelerator ensures optimized global network routing, directing traffic to the nearest healthy endpoint across regions.
+
+### API Gateway (in each AZ)
+- Manages API requests.
+- Provides features like request validation, throttling, and routing to backend microservices.
+
+### Keycloak Authorizer
+- Handles user authentication & authorization.
+- Ensures only authenticated requests with valid credentials can access protected APIs.
+- Likely integrated with API Gateway as a custom authorizer.
+
+### Multi-Tenant Kubernetes Layer (EKS)
+Each tenant (A, B, …) has its own dedicated set of microservices and supporting resources, deployed in EKS clusters.
+
+**EKS Worker Nodes**
+- Host containerized applications.
+- Provide compute resources for services (scalable per tenant). 
+
+**Ingress Controller**
+- Manages routing of external traffic to internal Kubernetes services.
+- Acts as a single entry point per tenant to expose microservices.
+
+**Microservices**
+- Each tenant has its own isolated microservices for business logic.
+- Services communicate internally through Kubernetes networking.
+
+### Data Layer (per Tenant)
+Each tenant has isolated storage & caching components for data separation and performance.
+
+**Aurora PostgreSQL (RDS)**
+- Primary DB instance for writes.
+- Read replicas for scaling read-heavy workloads.
+- Ensures high availability across AZs.
+
+**Elasticache**
+- Provides in-memory caching.
+- Reduces load on Aurora/Postgres by serving frequent queries.
+
+**OpenSearch**
+- Used for full-text search, log analytics, or real-time indexing.
+- Each tenant has a primary node + read replicas for scalability.
+
+**High Availability & Fault Tolerance**
+
+Multi-AZ Deployment
+- Architecture spans three availability zones, ensuring that failure in one AZ does not affect overall availability.
+- Aurora, OpenSearch, and Elasticache are deployed in HA mode with primary and read replicas across zones.
+
+Load Balancing
+- Ingress controllers distribute requests across microservices.
+- API Gateway and Global Accelerator balance API calls globally.
+
+**Multi-Tenancy Strategy**
+
+Tenant Isolation
+- Each tenant (A, B, …) has separate EKS services, DBs, caches, and search resources.
+- Provides strong security and performance isolation.
+
+Shared Infrastructure
+- Core infrastructure (Route 53, Global Accelerator, API Gateway, CloudFront, S3) is shared across all tenants.
+- Reduces operational cost while still maintaining tenant-level isolation at the application and data layer.
 
 
 # 7. 💾 Migrations
@@ -170,20 +233,20 @@ We don't have migration for this architecture since its a new system.
 # 11. 🥞 Technology Stack
 
 **Backend Services**:
-- **Languages**: Java 24+ with Spring Boot framework
-- **Build Tool**: Maven for dependency management and builds
-- **Container**: Docker with Kubernetes (EKS) orchestration
-- **API**: RESTful APIs with Spring Web and WebSocket support
+- Languages: Java 24+ with Spring Boot framework
+- Build Tool: Maven for dependency management and builds
+- Container: Docker with Kubernetes (EKS) orchestration
+- API: RESTful APIs with Spring Web and WebSocket support
 
 **Mobile Applications**:
-- **Android**: Kotlin with Jetpack Compose
-- **iOS**: Swift with SwiftUI
-- **Communication**: HTTP/HTTPS with WebSocket for real-time features
+- Android: Kotlin with Jetpack Compose
+- iOS: Swift with SwiftUI
+- Communication: HTTP/HTTPS with WebSocket for real-time features
 
 **Infrastructure**:
-- **Cloud**: AWS (Multi-AZ deployment)
-- **Database**: PostgreSQL (RDS), Redis (ElastiCache)
-- **Search**: Elasticsearch Service
-- **Storage**: S3, CloudFront CDN
-- **Messaging**: SQS, SNS for notifications
-- **Monitoring**: CloudWatch, X-Ray, Prometheus/Grafana
+- CloudFront + S3
+- Route 53 + Global Accelerator 
+- API Gateway
+- Keycloak Authorizer
+- Messaging: SQS, SNS for notifications
+- Monitoring: CloudWatch, X-Ray, Prometheus/Grafana
