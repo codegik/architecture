@@ -170,7 +170,7 @@ We don't have migration for this architecture since its a new system.
 # 11. 🥞 Technology Stack
 
 **Backend Services**:
-- **Languages**: Java 17+ with Spring Boot framework
+- **Languages**: Java 24+ with Spring Boot framework
 - **Build Tool**: Maven for dependency management and builds
 - **Container**: Docker with Kubernetes (EKS) orchestration
 - **API**: RESTful APIs with Spring Web and WebSocket support
