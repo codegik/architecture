@@ -96,7 +96,7 @@ The architecture combines static file delivery (frontend), API Gateway with auth
 - **S3** for file storage and video assets
 - **CloudFront** for CDN distribution
 
-## 5.3 🗂️ Use Cases
+## 5.3 🗂️ Use Cases  (TBD: need to create the diagrams)
 
 - User registration and tenant onboarding
 - POC creation, editing, and management
@@ -109,17 +109,107 @@ The architecture combines static file delivery (frontend), API Gateway with auth
 
 # 6. 🧭 Trade-offs
 
-TBD 
+## Native Mobile vs Cross-platform
+
+| **Aspect**                   | **Native Mobile (Swift/Kotlin, etc.)**                                                | **Cross-platform (Flutter, React Native, etc.)**                                       |
+|------------------------------|---------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|
+| **Development Speed & Cost** | Slower, more expensive (separate codebases for iOS & Android).                        | Faster, cheaper (one codebase for multiple platforms).                                 |
+| **Performance**              | Best performance, optimized for each OS, smooth animations, ideal for graphics/AR/VR. | Slightly lower performance due to abstraction layer; may struggle with heavy graphics. |
+| **Access to Features**       | Immediate access to latest OS/device APIs (camera, sensors, biometrics, ARKit, etc.). | May lag in supporting new APIs; often requires custom native modules.                  |
+| **User Experience (UX/UI)**  | Feels “native” — adheres to platform design guidelines (HIG/Material).                | Can get close, but sometimes inconsistent or less polished across devices.             |
+| **Maintenance**              | Higher effort: must maintain two separate apps.                                       | Easier maintenance: one codebase to fix/update for both platforms.                     |
+| **Talent/Skills Needed**     | Requires iOS + Android specialists.                                                   | One dev team can cover both platforms (JavaScript, Dart, etc.).                        |
+
+## Microservices vs Monolith
+
+| **Aspect**               | **Monolith**                                          | **Microservices**                                                           | **Trade-off / Notes**                                                                                                                                                |
+|--------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Complexity**           | Lower – single codebase, simpler to develop initially | Higher – many services, distributed system challenges                       | Monolith is easier to start with; microservices require infrastructure for service coordination, deployment, and monitoring                                          |
+| **Scalability**          | Limited – entire application scales together          | High – individual services can scale independently                          | Microservices allow precise resource allocation, but add operational complexity                                                                                      |
+| **Deployment**           | Simple – deploy the whole application at once         | Flexible – deploy services independently                                    | Microservices enable faster iteration for parts of the system but require CI/CD pipelines and orchestration tools                                                    |
+| **Resilience**           | Lower – failure in one part can affect entire app     | Higher – failures are isolated to services                                  | Microservices improve fault tolerance, but require careful handling of inter-service communication                                                                   |
+| **Development Speed**    | Faster initially – single team, shared codebase       | Can be faster at scale – multiple teams work on different services          | Monolith is faster for small teams; microservices are better for large, distributed teams                                                                            |
+| **Technology Choice**    | Limited – typically one tech stack                    | Flexible – each service can use best-suited tech                            | Microservices allow polyglot programming but increase operational overhead                                                                                           |
+| **Testing**              | Easier – end-to-end testing in a single app           | Harder – testing interactions across services                               | Microservices require robust integration and contract testing                                                                                                        |
+| **Observability**        | Moderate – single app logs, metrics easier to collect | Critical – must implement distributed tracing, centralized logging, metrics | Microservices require robust observability practices to detect issues across services; Monolith is easier to monitor but harder to isolate root causes in large apps |
+| **Operational Overhead** | Low – fewer deployments, less monitoring              | High – service discovery, logging, monitoring, orchestration                | Microservices need more DevOps maturity to manage efficiently                                                                                                        |
+
+
+## EKS vs ECS
+
+| **Aspect**                     | **ECS (Elastic Container Service)**                                    | **EKS (Elastic Kubernetes Service)**                                  | **Trade-off / Notes**                                                                                                  |
+|--------------------------------|------------------------------------------------------------------------|-----------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------|
+| **Complexity**                 | Lower – managed container orchestration, simpler setup                 | Higher – Kubernetes has steep learning curve                          | ECS is easier for teams new to container orchestration; EKS gives full Kubernetes features but requires more expertise |
+| **Flexibility**                | Moderate – AWS-native features, some limitations                       | High – full Kubernetes ecosystem, supports multi-cloud portability    | EKS allows more customization and standard Kubernetes tools; ECS is AWS-specific but simpler                           |
+| **Deployment & Management**    | Simpler – integrates tightly with AWS, less operational overhead       | More complex – need to manage clusters, nodes, and Kubernetes objects | ECS is faster to deploy; EKS offers more granular control and standardization                                          |
+| **Scalability**                | High – integrates with Auto Scaling, Fargate for serverless containers | High – Kubernetes-native autoscaling, multi-cluster management        | Both scale well; EKS gives more control at cost of complexity                                                          |
+| **Community & Ecosystem**      | AWS-focused – smaller ecosystem outside AWS                            | Kubernetes ecosystem – large, active community and tools              | EKS benefits from portability and community support; ECS is simpler but AWS-locked                                     |
+| **Observability & Monitoring** | AWS CloudWatch integration, simpler metrics/logs                       | Kubernetes-native tools (Prometheus, Grafana) plus CloudWatch         | ECS is easier to monitor by default; EKS provides more flexibility for advanced observability setups                   |
+| **Cost**                       | Lower for small/simple workloads – less management overhead            | Higher – cluster management costs, but flexible with Fargate          | ECS is cost-efficient for simpler use cases; EKS scales better for complex or multi-team environments                  |
+| **Operational Overhead**       | Low – managed service, minimal Kubernetes knowledge required           | Higher – need Kubernetes expertise, more components to maintain       | ECS is “easier to run”; EKS offers powerful orchestration but requires DevOps maturity                                 |
+
+## Database per tenant vs Shared Database
+
+| **Aspect**                             | **Database-per-Tenant**                                    | **Shared Database**                                              | **Trade-off / Notes**                                                                     |
+|----------------------------------------|------------------------------------------------------------|------------------------------------------------------------------|-------------------------------------------------------------------------------------------|
+| **Data Isolation & Security**          | Excellent – full isolation per tenant                      | Moderate – relies on row-level separation                        | Per-tenant DB is safer for compliance; shared DB requires careful access control          |
+| **Scalability**                        | Moderate – scale individual tenant DBs independently       | High – fewer databases to manage, easier horizontal scaling      | Shared DB reduces operational overhead but can have noisy neighbor issues                 |
+| **Maintenance & Operational Overhead** | Higher – schema changes, backups, and upgrades per DB      | Lower – single schema, single DB to maintain                     | Shared DB is simpler to manage at scale; per-tenant DB needs automation                   |
+| **Customizability**                    | High – schema or configuration can differ per tenant       | Low – all tenants share same schema                              | Useful if tenants need unique features or data structures                                 |
+| **Cost**                               | Higher – more storage, connections, and resources          | Lower – single DB shared across tenants                          | Shared DB is more cost-efficient, but can impact isolation                                |
+| **Performance**                        | High – tenant workloads don’t interfere                    | Moderate – tenants share resources, may cause contention         | Database-per-tenant offers better isolation; shared DB can have “noisy neighbor” issues   |
+| **Observability & Monitoring**         | Moderate – per-DB metrics, easier to isolate tenant issues | Moderate – monitoring per tenant requires filtering in shared DB | Easier to detect issues in per-tenant DBs, but shared DB can still be monitored centrally |
+| **Deployment Complexity**              | Moderate – each new tenant needs new DB                    | Low – new tenant only adds rows                                  | Shared DB simplifies onboarding; per-tenant DB increases operational steps                |
+
+## Authorization tokens with tenant_id vs Subdomain with tenant_id
+
+| **Aspect**                           | **Token with `tenant_id`**                                   | **Subdomain with `tenant_id`**                                         | **Trade-off / Notes**                                                                                |
+|--------------------------------------|--------------------------------------------------------------|------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| **Tenant Identification**            | Explicitly carried in token, verified server-side            | Derived from URL/subdomain, resolved on request                        | Tokens embed tenant info securely; subdomain approach relies on request parsing                      |
+| **Security & Isolation**             | High – token validation ensures tenant isolation             | Moderate – subdomain can be spoofed, requires additional server checks | Tokens are less prone to tampering; subdomain approach can be combined with token for extra security |
+| **Routing & Multi-Tenant Awareness** | No impact on routing – backend uses token for tenant context | Natural routing – requests automatically mapped to tenant via URL      | Subdomains simplify routing logic; tokens centralize tenant info in authorization layer              |
+| **User Experience**                  | Same URL for all tenants                                     | Unique URL per tenant                                                  | Subdomains are easier for branding/custom login pages; tokens don’t affect URL                       |
+| **Operational Overhead**             | Moderate – token management, validation, refresh             | Moderate – DNS/subdomain management, SSL certificates per tenant       | Both approaches add overhead in different areas; combining them can increase complexity              |
+| **Auditing & Logging**               | High – tenant\_id in token allows tracking actions           | Moderate – tenant inferred from request URL                            | Token-based approach gives precise, secure tenant context in logs                                    |
+| **Scalability**                      | High – token approach scales with users                      | High – subdomain approach scales with DNS/tenant routing               | Both scale well, but subdomains require proper DNS and routing infrastructure                        |
 
 ## 6.1 Major Decisions
 
-- **Native Mobile vs Cross-platform**: Chose native for better performance and UX
-- **Microservices vs Monolith**: Microservices for scalability and maintainability
-- **PostgreSQL vs NoSQL**: Relational database for ACID compliance and complex queries
-- **Kubernetes vs EC2**: EKS for better container management and scaling
-- **Real-time**: WebSockets for immediate updates vs polling for simplicity
-- **Database-per-tenant**: Strong isolation; higher ops cost; best for VIP/regulatory tenants.
-- **Auth**: OIDC/SAML (per-tenant); JWT includes tenant_id and roles.
+### Native Mobile vs Cross-platform
+- Native apps are compiled into machine code.
+- Gives them faster execution, smoother animations, better responsiveness, and more efficient memory use compared to cross-platform frameworks.
+- Native apps get direct access to OS APIs and hardware (camera, GPS, NFC, sensors, biometrics, push notifications).
+- This gives users a familiar, consistent look & feel and better accessibility support.
+
+### Microservices vs Monolith
+- Microservices let you scale only the components that need more resources (e.g., just the “payment service” during Black Friday).
+- Each microservice can be developed, deployed, and updated independently, often by different teams.
+- A failure in one microservice (e.g., recommendations service) does not crash the entire system.
+
+### PostgreSQL vs NoSQ
+- PostgreSQL is fully ACID-compliant by default (Atomicity, Consistency, Isolation, Durability).
+- PostgreSQL supports powerful SQL queries, joins, aggregations, subqueries, window functions, and advanced indexing.
+- PostgreSQL enforces a well-defined schema, ensuring data quality and structure.
+
+### EKS vs EC2
+- EKS runs Kubernetes for you — AWS manages the control plane (API server, etcd, scheduler).
+- EKS integrates natively with Cluster Autoscaler and Horizontal Pod Autoscaler, adjusting resources automatically.
+- EKS is designed for containerized microservices, making it easier to run modern architectures.
+
+### Real-time features with WebSocket vs Polling
+- Updates are pushed instantly from server → client (and vice versa).
+- Reduces unnecessary network requests and bandwidth usage.
+- WebSocket enables smooth, continuous interactions (live chats, stock tickers, multiplayer games, collaborative editing).
+
+### Database per tenant
+- Each tenant’s data lives in its own dedicated database → no risk of cross-tenant data leaks.
+- Heavy usage by one tenant won’t slow down others since queries and workloads are isolated.
+- You can upgrade schemas, tune indexes, or apply patches per tenant without impacting others.
+
+### Authorization
+- Authorization tokens (JWT, OAuth2, etc.) carry the tenant identifier (tenant_id/realm/claims).
+- All services can consistently extract tenant_id from authorization → uniform logic across microservices.
+- Since every request is tied to an authenticated identity + tenant_id, you get a clear audit trail (who accessed what, from which tenant).
 
 ## 6.2 🌏 For each key major component
 
@@ -196,27 +286,87 @@ Shared Infrastructure
 
 We don't have migration for this architecture since its a new system.
 
-# 8. 🧪 Testing strategy
+# 8. 🧪 Testing strategy (TBD: need to detail more)
 
-- **Unit Tests**: Individual service testing with high coverage
-- **Integration Tests**: API endpoint and database interaction testing
-- **End-to-End Tests**: Mobile app user flow automation
-- **Load Testing**: Performance testing for multi-tenant scenarios
-- **Security Testing**: Penetration testing and vulnerability assessments
-- **Real-time Testing**: WebSocket connection and message delivery testing
+## Frontend Tests
+- ReactJS component rendering tests with focus on performance metrics.
+- Client-side state management tests.
+- WebSocket client implementation tests.
+
+## Contract tests
+- Test API contracts between decomposed microservices.
+- Verify WebSocket message formats and protocols.
+- Validate data synchronization contracts between PostgreSQL and OpenSearch.
+
+## Integration tests
+- Try to cover most of the scenarios.
+- Test WebSocket real-time communication flows.
+- Run in isolated environments before production deployment.
+
+## Infra tests
+- Verify PGsync data synchronization between Aurora and OpenSearch.
+- Test CloudFront edge caching effectiveness.
+- Validate Global Accelerator routing behavior.
+
+## Performance tests
+- Use Gatling to simulate the user behavior and check the system's performance.
+- Test search latency using OpenSearch under various query patterns.
+- Measure database query performance under load
+- Measure UI rendering time across device types
+- Benchmark WebSocket vs HTTP performance in real usage scenarios
+- Track CDN cache hit/miss ratios
+- Execute in staging environment with production-like conditions
+
+## Chaos tests
+- Simulate AWS region failures to test Global Accelerator failover
+- Test WebSocket reconnection strategies during network disruptions
+- Inject latency between services to identify performance bottlenecks
+- Verify system behavior during PGsync failures
+- Execute in isolated production environment during low-traffic periods
+
 
 # 9. 👀 Observability strategy
 
-- **Logging**: Centralized logging with AWS CloudWatch and ELK stack (Elasticsearch, Logstash, Kibana)
-- **Metrics**: Application and infrastructure metrics using CloudWatch, Prometheus, and Grafana
-- **Tracing**: Distributed tracing with AWS X-Ray for microservices communication
-- **Monitoring**: Real-time alerts and dashboards for system health and performance
-- **APM**: Application Performance Monitoring with custom metrics for POC operations
-- **Tenant Metrics**: Per-tenant usage analytics and resource consumption tracking
-- **Error Tracking**: Automated error detection and alerting with Sentry integration
+Observability-based testing in production (also called "testing in production" or "production testing") uses monitoring, logging, and tracing data to validate system behavior after deployment.
 
+There will be an event notifier that is going to log all operations.
 
-# 10. 💿 Data Store Designs
+There will be a dashboard to expose metrics and performance.
+
+There will be alerts to notify the team about any issue.
+
+Here are the key approaches:
+
+## Synthetic Monitoring
+Collect features metrics (latency, counters, etc) continuously to validate critical user journeys.
+
+## Real User Monitoring
+Track actual user interactions and performance metrics:
+- ReactJS component render times
+- WebSocket connection success rates
+- Search result relevance and speed
+- Page load times across different regions
+
+## Error Rate Monitoring 
+Set up alerts for anomalies in:
+- WebSocket connection failures
+- OpenSearch query timeouts
+- Aurora PostgreSQL connection pool exhaustion
+- CloudFront 5xx errors
+
+## Business Metrics Validation
+Monitor business KPIs to detect regressions:
+- POC Creation Rate
+- Active User Rate
+- Session Duration
+- Feature Adoption Rate
+- Search Response Time
+- Mobile App Crash Rate
+- Tenant Onboarding Time
+- Report Generation Time
+- Video Compilation Time
+
+# 10. 💿 Data Store Designs (TBD: need to detail more)
 
 - **Primary Database**: PostgreSQL (RDS Multi-AZ) for transactional data
     - Tenant-specific schemas for data isolation
@@ -230,7 +380,7 @@ We don't have migration for this architecture since its a new system.
 - **Message Queue**: SQS for asynchronous processing and video generation jobs
 
 
-# 11. 🥞 Technology Stack
+# 11. 🥞 Technology Stack (TBD: need to detail more)
 
 **Backend Services**:
 - Languages: Java 24+ with Spring Boot framework
@@ -241,7 +391,7 @@ We don't have migration for this architecture since its a new system.
 **Mobile Applications**:
 - Android: Kotlin with Jetpack Compose
 - iOS: Swift with SwiftUI
-- Communication: HTTP/HTTPS with WebSocket for real-time features
+- Communication: HTTPS and WebSocket for real-time features
 
 **Infrastructure**:
 - CloudFront + S3
