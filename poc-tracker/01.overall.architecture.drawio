@@ -438,14 +438,14 @@
     </mxGraphModel>
   </diagram>
   <diagram id="BGZHWTWwNWjGH87uwMEw" name="deployment.app">
-    <mxGraphModel dx="3037" dy="1007" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1119" dy="716" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="0XEMuGiK4ZWqo2sjq5a6-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;exitX=0;exitY=0;exitDx=217;exitDy=296;exitPerimeter=0;" parent="1" source="0XEMuGiK4ZWqo2sjq5a6-1" target="0XEMuGiK4ZWqo2sjq5a6-21" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="0XEMuGiK4ZWqo2sjq5a6-1" value="Microservices" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;verticalAlign=top;" parent="1" vertex="1">
+        <mxCell id="0XEMuGiK4ZWqo2sjq5a6-1" value="EKS" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;verticalAlign=top;" parent="1" vertex="1">
           <mxGeometry x="53" y="313" width="414" height="296" as="geometry" />
         </mxCell>
         <mxCell id="0XEMuGiK4ZWqo2sjq5a6-2" value="tracker.jar" style="html=1;outlineConnect=0;whiteSpace=wrap;fillColor=#AFFFAF;shape=mxgraph.archimate3.application;appType=equipment;archiType=square;" parent="1" vertex="1">
@@ -472,7 +472,7 @@
         <mxCell id="0XEMuGiK4ZWqo2sjq5a6-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="0XEMuGiK4ZWqo2sjq5a6-15" target="0XEMuGiK4ZWqo2sjq5a6-30" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="0XEMuGiK4ZWqo2sjq5a6-15" value="Web Application" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;verticalAlign=top;" parent="1" vertex="1">
+        <mxCell id="0XEMuGiK4ZWqo2sjq5a6-15" value="Cloud Front" style="shape=cube;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;darkOpacity=0.05;darkOpacity2=0.1;verticalAlign=top;" parent="1" vertex="1">
           <mxGeometry x="814" y="373.5" width="414" height="175" as="geometry" />
         </mxCell>
         <mxCell id="0XEMuGiK4ZWqo2sjq5a6-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=none;startFill=0;" parent="1" source="0XEMuGiK4ZWqo2sjq5a6-16" target="0XEMuGiK4ZWqo2sjq5a6-17" edge="1">
