@@ -87,14 +87,20 @@ The architecture combines static file delivery (frontend), API Gateway with auth
 
 ## 5.2 🗂️ Deployment
 
-![img.deployment.png](img.deployment.png)
-- 
+### App deployment
+
+![img.deployment.app.png](img.deployment.app.png)
+
 - **Multi-AZ AWS deployment**
 - **EKS clusters** for container orchestration
 - **RDS Multi-AZ** for PostgreSQL databases
 - **ElastiCache** for Redis caching
 - **S3** for file storage and video assets
 - **CloudFront** for CDN distribution
+
+### Tenant deployment
+
+![img.deployment.tenant.png](img.deployment.tenant.png)
 
 ## 5.3 🗂️ Use Cases  (TBD: need to create the diagrams)
 
@@ -170,7 +176,7 @@ The architecture combines static file delivery (frontend), API Gateway with auth
 | **Routing & Multi-Tenant Awareness** | No impact on routing – backend uses token for tenant context | Natural routing – requests automatically mapped to tenant via URL      | Subdomains simplify routing logic; tokens centralize tenant info in authorization layer              |
 | **User Experience**                  | Same URL for all tenants                                     | Unique URL per tenant                                                  | Subdomains are easier for branding/custom login pages; tokens don’t affect URL                       |
 | **Operational Overhead**             | Moderate – token management, validation, refresh             | Moderate – DNS/subdomain management, SSL certificates per tenant       | Both approaches add overhead in different areas; combining them can increase complexity              |
-| **Auditing & Logging**               | High – tenant\_id in token allows tracking actions           | Moderate – tenant inferred from request URL                            | Token-based approach gives precise, secure tenant context in logs                                    |
+| **Auditing & Logging**               | High – tenant_id in token allows tracking actions            | Moderate – tenant inferred from request URL                            | Token-based approach gives precise, secure tenant context in logs                                    |
 | **Scalability**                      | High – token approach scales with users                      | High – subdomain approach scales with DNS/tenant routing               | Both scale well, but subdomains require proper DNS and routing infrastructure                        |
 
 ## 6.1 Major Decisions
@@ -286,7 +292,7 @@ Shared Infrastructure
 
 We don't have migration for this architecture since its a new system.
 
-# 8. 🧪 Testing strategy (TBD: need to detail more)
+# 8. 🧪 Testing strategy
 
 ## Frontend Tests
 - ReactJS component rendering tests with focus on performance metrics.
@@ -309,7 +315,7 @@ We don't have migration for this architecture since its a new system.
 - Validate Global Accelerator routing behavior.
 
 ## Performance tests
-- Use Gatling to simulate the user behavior and check the system's performance.
+- Use K6 to simulate the user behavior and check the system's performance.
 - Test search latency using OpenSearch under various query patterns.
 - Measure database query performance under load
 - Measure UI rendering time across device types
@@ -366,7 +372,7 @@ Monitor business KPIs to detect regressions:
 - Report Generation Time
 - Video Compilation Time
 
-# 10. 💿 Data Store Designs (TBD: need to detail more)
+# 10. 💿 Data Store Designs (TBD: need to create diagrams)
 
 - **Primary Database**: PostgreSQL (RDS Multi-AZ) for transactional data
     - Tenant-specific schemas for data isolation
@@ -400,3 +406,12 @@ Monitor business KPIs to detect regressions:
 - Keycloak Authorizer
 - Messaging: SQS, SNS for notifications
 - Monitoring: CloudWatch, X-Ray, Prometheus/Grafana
+
+
+
+# TODO
+- Add uml diagrams for use cases
+- Details more the technology stack
+- Create a solution for the video generation
+- Add uml diagrams for data store designs
+- Add Mobile details spread over the architecture items

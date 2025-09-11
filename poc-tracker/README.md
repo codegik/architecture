@@ -17,3 +17,15 @@ Such system must be secure and have proper login and be able to support Realtime
 - MongoDB
 - Single Relational DB
 - Other Clouds that are not AWS
+
+## Solution
+
+The solution is a mobile and web app built with React Native for cross-platform compatibility, allowing users to register, search, and manage their POCs efficiently. 
+
+The backend is developed using Java, ensuring a robust and scalable architecture.
+
+Click on the image below to see the overall architecture.
+
+<a href="architecture.md">
+  <img src="img.overall.architecture.png" alt="Overall Architecture" width="300"/>
+</a>
