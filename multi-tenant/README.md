@@ -168,7 +168,6 @@ Rules:
 |----------------------------|--------------------------------------------|-----------------------------------------------|-------------------------------------------|
 | **Cost**                   | Highest - Dedicated resources per tenant   | Medium - Shared compute, separate DB costs    | Lowest - Maximum resource sharing         |
 | **Security**               | Maximum - Complete isolation               | Moderate - Data isolated, shared compute risk | Lowest - Single DB compromise affects all |
-| **Compliance**             | Excellent - Meets strictest requirements   | Good - Suitable for most standards            | Limited - May not meet strict regulations |
 | **Operational Complexity** | High - Multiple environments to manage     | Medium - Mixed management approach            | Low - Single environment                  |
 | **Performance**            | Predictable - No tenant interference       | Mixed - Shared compute, isolated DB           | Shared - Noisy neighbor issues            |
 | **Scaling**                | Independent per tenant                     | Mixed - App scales together, DB individually  | Unified - All tenants scale together      |
