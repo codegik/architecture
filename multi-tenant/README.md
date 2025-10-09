@@ -11,6 +11,8 @@ We can have levels of Multi-Tenancy.
 ## 1. Infrastructure Isolation
 Is the highest level of multi-tenancy isolation where each tenant gets completely separate infrastructure resources.
 
+![img.infra.isolation.png](img.infra.isolation.png)
+
 **Complete Resource Separation**
 
 - Each tenant has dedicated servers, databases, application instances, and storage.
@@ -37,6 +39,8 @@ Is the highest level of multi-tenancy isolation where each tenant gets completel
 ## 2. Shared Infrastructure, Separate Databases
 
 This is a middle-ground approach where tenants share compute resources but maintain complete data isolation through separate database instances.
+
+![img.db.isolation.png](img.db.isolation.png)
 
 **Shared Application Layer**
 
@@ -66,6 +70,8 @@ This is a middle-ground approach where tenants share compute resources but maint
 ## 3. Shared Database, Separate Schemas
 
 This approach maximizes resource sharing while maintaining logical data separation through database schema isolation.
+
+![img.schema.isolation.png](img.schema.isolation.png)
 
 **Shared Application Layer**
 
@@ -172,3 +178,13 @@ Rules:
 | **Best For**               | Enterprise, compliance-critical            | Mid-market, data privacy needs                | Startups, cost-sensitive                  |
 | **Tenant Impact**          | Zero cross-tenant impact                   | Compute interference possible                 | High cross-tenant impact risk             |
 | **Customization**          | High - Per tenant configs                  | Medium - Shared app, custom DB                | Low - Shared everything                   |
+
+
+
+
+
+
+
+# Single-Tenant
+
+TBD
