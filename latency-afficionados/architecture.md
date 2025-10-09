@@ -271,16 +271,17 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 
 #### Pre-Migration Phase
 
-1. **Monolith Modernization First**
-* Java Version Upgrade: Migrate existing monolith from legacy Java to Latest Stable Version using OpenRewrite and GitHub Copilot.
-* Dependency Updates: Update existing dependencies and third-party libraries.
-* Testing Foundation: Ensure most important existing feature has integration and unit test before decomposition begins.
-
-2. **Architecture Assessment**
+1. **Architecture Assessment**
 * Domain Boundary Analysis: Identify clear service boundaries based on business capabilities.
 * Data Dependency Mapping: Analyze database relationships and identify tightly coupled data.
 * Cross Service Analysis: Identify cross-service transaction requirements.
 * API Surface Analysis: Map existing internal method calls that will become service-to-service communication.
+
+2. **Monolith Modernization First**
+* Java Version Upgrade: Migrate existing monolith from legacy Java to Latest Stable Version using OpenRewrite and GitHub Copilot.
+* Dependency Updates: Update existing dependencies and third-party libraries.
+* Testing Foundation: Ensure most important existing feature has integration and unit test before decomposition begins.
+
 
 #### Migration Execution Phase 
 
@@ -469,3 +470,4 @@ Here are the key approaches:
 7. [X] Store concept 
 8. [X] Bundler module federation (don't need to use module federation)
 9. [X] Observability tests pos prod
+10. [ ] Migrate one domain and show how would work. Explain how will work two DBs.
