@@ -73,16 +73,18 @@ The fintech payment platform faces several critical challenges that must be addr
 - White-Label.
 
 
-## 📐 4. Principles
+## 📐 4. Principles [DONE]
 
-- Cloud-Native: Leverage cloud services for scalability, availability, and managed infrastructure.
 - Security First: Prioritize security in every design decision.
 - API-First: Design APIs before implementation.
+- Multi-tenancy: Complete tenant isolation for data and users
+- Microservices: Distributed architecture with independent services
+- Cloud-Native: Services designed for AWS cloud infrastructure
 - Observability: Build in logging, monitoring, and tracing from day one.
+- Cloud-Native: Leverage cloud services for scalability, availability, and managed infrastructure.
 - Resilience: Design for failure and automatic recovery.
 - Auditability: Maintain immutable audit logs.
 - Performance: Optimize for critical paths without compromising consistency.
-
 
 # 🏗️ 5. Overall Diagrams
 
