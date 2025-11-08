@@ -88,14 +88,15 @@ The fintech payment platform faces several critical challenges that must be addr
 
 # 5. Overall Architecture
 
-![img-registration-flow.png](diagrams/img-registration-flow.png)
+![img-overall-architecture.png](diagrams/img-overall-architecture.png)
+
 
 ## 5.1 Incoming & Outgoing Traffic Protection
 
-![img-traffic-protection.png](diagrams/img-traffic-protection.png)
-
 - All incoming requests from frontend clients MUST pass through AWS WAF (ingress) before reaching any backend service.
 - All outgoing requests to external third-party services (banks, payment gateways, credit card networks) MUST pass through AWS WAF (egress) for inspection and protection.
+
+![img-traffic-protection.png](diagrams/img-traffic-protection.png)
 
 **Rules**:
 - Block known malicious IPs
@@ -146,21 +147,26 @@ The fintech payment platform faces several critical challenges that must be addr
 - Right to Deletion: Anonymize financial records (compliance), delete non-essential data.
 - Data Retention: 5 years for transactions (regulatory), automated cleanup after expiration.
 
+
 ## 5.3 Authentication & Authorization
 - Keycloak: OAuth2/OpenID Connect with JWT tokens.
 - MFA: Required for large transactions (>R$1000).
 - RBAC: Role-based permissions (user, admin, merchant).
 - Token Expiry: 1 hour access token, 24 hour refresh token.
 
+
 ## 5.4 Fraud Detection
 - Transaction Risk Scoring: Velocity checks, unusual amounts, new devices.
 - Anomaly Detection: ML-based predictions.
 - Thresholds: Block transactions >70 risk score, require MFA for >50.
 
+
 ## 5.5 Audit
+
 
 ## 5.6 Evolution plan
 How can the architecture evolve to support new requirements, integrations, or increased scalability in the future?
+
 
 ## 5.2 Deployment
 
@@ -169,6 +175,12 @@ How can the architecture evolve to support new requirements, integrations, or in
 ## 5.4 Microservices 
 
 Here are the key microservices that make up the fintech payment platform:
+
+### Tenant Registration Service
+- Automated onboarding service to provision new tenant databases, configurations, and resources.
+- Trigger auto reload database connections in other microservices.
+
+![img-tenant-registration-service.png](diagrams/img-tenant-registration-service.png)
 
 ### Notification Service
 - Handles email and push notifications.
@@ -183,30 +195,23 @@ Here are the key microservices that make up the fintech payment platform:
 - Integration with external payment gateways (banks, credit cards).
 - Payment idempotency handling.
 
-### Account Service
-- Manage user account balances
-- Account creation and status management
-- Multi-currency support (if needed)
-
-### Transaction Service
-- Record all financial transactions
-- Provide transaction history
-- Support audit trails and compliance
-
-### Statement Service
-- Generate financial statements and reports
-- Query transaction history
-- Export capabilities for users
+![img-payment-service.png](diagrams/img-payment-service.png)
 
 ### Fraud Detection Service
-- Transaction risk scoring
-- Anomaly detection using ML
-- Velocity checks and unusual pattern detection
 
-### Integration Service
-- Manage external gateway integrations
-- Handle bank and credit card network communication
-- Retry logic and circuit breakers for external calls
+- Transaction risk scoring with real-time ML-based anomaly detection.
+- Velocity checks to detect suspicious transaction frequency and patterns.
+- Device fingerprinting and geolocation intelligence.
+- Configurable rule engine with blacklist/whitelist management.
+
+**ML-based anomaly detection**
+- Use Debezium connectors to stream transaction data changes from Aurora PostgreSQL to Kafka topics.
+- Use Airflow and MLFlow to orchestrate periodic training jobs that consume transaction data from Kafka, train anomaly detection models, and store them in S3.
+- EMR clusters run Spark jobs to perform batch inference on recent transactions, scoring them for fraud risk.
+- Fraud scores are written into Aurora PostgreSQL for real-time access by the Fraud Detection Service.
+
+![img-fraud-detection-service.png](diagrams/img-fraud-detection-service.png)
+
 
 ### Audit Service
 - Maintain immutable audit logs
@@ -514,4 +519,4 @@ Monitor business KPIs to detect regressions.
 - Review whole requirements.
 - Structure the services like user management, payment, notifications, etc.
 - Correlation Ids for tracing requests across microservices.
-- 
+- KMS integration for sensitive data encryption.
