@@ -90,7 +90,6 @@ The fintech payment platform faces several critical challenges that must be addr
 
 ## 5.1 Incoming & Outgoing Traffic Protection
 - All incoming requests from frontend clients MUST pass through AWS WAF (ingress) before reaching any backend service.
-
 - All outgoing requests to external third-party services (banks, payment gateways, credit card networks) MUST pass through AWS WAF (egress) for inspection and protection.
 
 **Rules**:
@@ -154,11 +153,6 @@ The fintech payment platform faces several critical challenges that must be addr
 - Thresholds: Block transactions >70 risk score, require MFA for >50.
 
 ## 5.5 Audit
-[TODO] 
-- Create diagrams for overall architecture items.
-- Review whole DOC.
-- Review whole requirements.
-- Structure the services like user management, payment, notifications, etc.
 
 ## 5.6 Evolution plan
 How can the architecture evolve to support new requirements, integrations, or increased scalability in the future?
@@ -363,65 +357,76 @@ Observability-based testing in production (also called "testing in production" o
 
 Here are the key approaches:
 
-- **Synthetic Monitoring**: Collect features metrics (latency, counters, etc) continuously to validate critical user journeys.
+### Synthetic Monitoring
+Collect features metrics (latency, counters, etc) continuously to validate critical user journeys.
 
-- **Real User Monitoring**: Track actual user interactions and performance metrics.
-    - WebSocket connection success rates
-    - Search result relevance and speed
-    - Payment processing times
-    - Statement generation times
+### Real User Monitoring 
+Track actual user interactions and performance metrics.
+- WebSocket connection success rates
+- Search result relevance and speed
+- Payment processing times
+- Statement generation times
 
-- **Error Rate Monitoring**: Set up alerts for anomalies in.
-    - WAF blocked requests and attack patterns (ingress and egress)
-    - API Gateway 4xx/5xx errors
-    - Authentication/authorization failures
-    - Payment processing errors
-    - Database connection failures
-    - External gateway integration timeouts (bank APIs, credit cards)
-    - WAF egress rule violations (unauthorized destinations)
+### Error Rate Monitoring
+Set up alerts for anomalies in.
+- WAF blocked requests and attack patterns (ingress and egress)
+- API Gateway 4xx/5xx errors
+- Authentication/authorization failures
+- Payment processing errors
+- Database connection failures
+- External gateway integration timeouts (bank APIs, credit cards)
+- WAF egress rule violations (unauthorized destinations)
 
-- **Business Metrics Validation**: Monitor business KPIs to detect regressions.
-    - Product listing success rate
-    - Search-to-purchase conversion
-    - User session duration
-    - Payment success rate
-    - Statement generation requests
+### Business Metrics Validation
+Monitor business KPIs to detect regressions.
+- Product listing success rate
+- Search-to-purchase conversion
+- User session duration
+- Payment success rate
+- Statement generation requests
 
 # 10. Technology Stack
 
 ## Backend Services [DONE]
-- **Primary Language**: Scala (Latest Stable Version)
+
+### Primary Language: Scala (Latest Stable Version)
   - Strong static typing for reliability.
   - Functional and Object-Oriented programming paradigms.
   - Excellent concurrency support.
   - Mature ecosystem for web services.
-- **Framework**: ZIO
+
+### Framework: ZIO
   - Asynchronous and concurrent programming made easier.
   - Strong type safety and functional programming principles.
   - Auto contained, there is Zero dependency on other libraries.
   - Robust error handling and resource management.
-- **Build Tool**: SBT
+
+### Build Tool: SBT
   - Native support for Scala projects.
   - Incremental compilation for faster builds.
   - Extensive plugin ecosystem.
-- **AI Assistant**: GitHub Copilot
+
+### AI Assistant: GitHub Copilot
   - Accelerates coding by suggesting code snippets.
   - Helps with boilerplate code generation.
   - Assists in learning new libraries and frameworks.
 
 ## Tests [DONE]
-- **K6**: Performance Testing
+
+### K6: Performance Testing
   - Very easy to simulate scenarios.
   - Built-in metrics and reporting.
   - Easy integration with CI/CD pipelines.
   - Native Grafana integration.
-- **ZIO Test**: Official ZIO testing framework
+
+### ZIO Test: Official ZIO testing framework
   - Type-safe assertions - Compile-time validation
   - Resource management - Automatic cleanup with ZIO's scoped pattern
   - Test aspects - Reusable cross-cutting concerns (timeout, retry, flaky)
   - Native ZIO integration - No need for Await.result or blocking operations
   - Parallel execution - Tests run concurrently by default
-- **MockServer**: API Mocking
+
+### MockServer: API Mocking
   - Faster Development - No waiting for external sandbox environments
   - Better Test Coverage - Easily simulate edge cases and failures
   - Parallel Testing - Tests don't interfere with each other
@@ -430,7 +435,8 @@ Here are the key approaches:
   - Security Testing - Validate WAF egress rules safely
   - Contract Validation - Ensure API integrations match specifications
   - Debugging - Inspect all requests sent to external APIs
-- **Toxiproxy**: Network Simulation
+
+### Toxiproxy: Network Simulation
   - Simulate real-world network failures (latency, timeouts, packet loss).
   - Test retry logic, circuit breakers, and fallback mechanisms.
   - Validate payment idempotency under network disruptions.
@@ -453,3 +459,13 @@ Here are the key approaches:
 * Relational DB Patterns https://www.geeksforgeeks.org/design-patterns-for-relational-databases/
 * Rendering Patterns https://www.patterns.dev/vanilla/rendering-patterns/
 * REST API Design https://blog.stoplight.io/api-design-patterns-for-rest-web-services
+
+
+
+[TODO]
+- Create diagrams for overall architecture items.
+- Review whole DOC.
+- Review whole requirements.
+- Structure the services like user management, payment, notifications, etc.
+- Correlation Ids for tracing requests across microservices.
+- 
