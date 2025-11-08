@@ -99,39 +99,39 @@ The fintech payment platform faces several critical challenges that must be addr
 ![img-traffic-protection.png](diagrams/img-traffic-protection.png)
 
 **Rules**:
-- Block known malicious IPs
-- Rate limit per IP 
-- Rate limit per tenant 
-- SQL Injection protection
-- XSS protection
-- Geo-blocking for unsupported countries
+- Block known malicious IPs.
+- Rate limit per IP.
+- Rate limit per tenant. 
+- SQL Injection protection.
+- XSS protection.
+- Geo-blocking for unsupported countries.
 
 **Features**:
-- OWASP Top 10 protection (https://owasp.org/)
-- DDoS mitigation via AWS Shield
-- Geo-blocking for Brazil + supported regions
-- Bot detection and CAPTCHA challenges
+- OWASP Top 10 protection (https://owasp.org/).
+- DDoS mitigation via AWS Shield.
+- Geo-blocking for Brazil + supported regions.
+- Bot detection and CAPTCHA challenges.
 
 **Outgoing Traffic Error Handling**
 - Circuit Breaker:
-  - Opens after 5 consecutive failures
-  - Half-open state after 1 minute
-  - Fail fast without calling external service
-  - Queue payments for later processing
+  - Opens after 5 consecutive failures.
+  - Half-open state after 1 minute.
+  - Fail fast without calling external service.
+  - Queue payments for later processing.
 
 - Retry Strategy:
-  - Exponential backoff: 1s → 2s → 4s
-  - Maximum 3 retry attempts
-  - Total timeout: ~7 seconds
-  - Idempotency keys prevent duplicate charges
+  - Exponential backoff: 1s → 2s → 4s.
+  - Maximum 3 retry attempts.
+  - Total timeout: ~7 seconds.
+  - Idempotency keys prevent duplicate charges.
 
 - Fallback Mechanisms:
-  - Primary gateway → Secondary gateway → Queue for manual processing
+  - Primary gateway → Secondary gateway → Queue for manual processing.
 
 - Dead Letter Queue (DLQ):
-  - Store failed payments after retry exhaustion
-  - Operations team reviews daily
-  - Manual retry or customer contact for resolution
+  - Store failed payments after retry exhaustion.
+  - Operations team reviews daily.
+  - Manual retry or customer contact for resolution.
 
 
 ## 5.2 Sensitive Data Protection & LGPD Compliance
@@ -139,6 +139,7 @@ The fintech payment platform faces several critical challenges that must be addr
 **Data Encryption**
 - Encryption: TLS 1.3 for all communication.
 - PII Encryption: Application-level encryption for user sensitive data and bank details.
+- Use AWS KMS for key management and rotation.
 
 **LGPD Compliance**
 - Data Minimization: Only collect necessary data for financial transactions.
@@ -153,15 +154,6 @@ The fintech payment platform faces several critical challenges that must be addr
 - MFA: Required for large transactions (>R$1000).
 - RBAC: Role-based permissions (user, admin, merchant).
 - Token Expiry: 1 hour access token, 24 hour refresh token.
-
-
-## 5.4 Fraud Detection
-- Transaction Risk Scoring: Velocity checks, unusual amounts, new devices.
-- Anomaly Detection: ML-based predictions.
-- Thresholds: Block transactions >70 risk score, require MFA for >50.
-
-
-## 5.5 Audit
 
 
 ## 5.6 Evolution plan
@@ -214,9 +206,12 @@ Here are the key microservices that make up the fintech payment platform:
 
 
 ### Audit Service
-- Maintain immutable audit logs
-- Track all system operations
-- Support regulatory compliance and investigations
+- Maintain immutable audit logs.
+- Track all system operations.
+- Support regulatory compliance and investigations.
+- Use PGSync to sync data with OpenSearch for querying and analysis.
+
+![img-audit-trail-service.png](diagrams/img-audit-trail-service.png)
 
 # 6. Trade-offs [DONE]
 
@@ -361,10 +356,14 @@ Each tenant has isolated storage & caching components for data separation and pe
 - Advanced security features (encryption, VPC isolation).
 - Seamless integration with AWS services.
 
-### Observability & Monitoring [TODO]
-- **Metrics Collection**: CloudWatch
-- **Logging**: CloudWatch Logs
+### Observability & Monitoring
+- Clear separation of concerns: Splunk for logs/traces, Prometheus+Grafana for metrics and real‑time monitoring.
+- Leverages native AWS telemetry (CloudWatch, X‑Ray) so instrumentation effort is reduced.
+- Centralized logs in Splunk enable rich search, correlation, and retention policies.
+- Prometheus provides efficient time-series querying and alerting with Grafana for visualization.
+- Use OpenTelemetry for consistent instrumentation across microservices and other infrastructure components.
 
+![img-observability.png](diagrams/img-observability.png)
 
 # 7. Testing strategy [DONE]
 
@@ -435,6 +434,11 @@ Monitor business KPIs to detect regressions.
 - User session duration
 - Payment success rate
 - Statement generation requests
+
+### Trace Analysis
+- Correlation IDs to trace requests across microservices end-to-end.
+- Identify bottlenecks, failures, and unexpected behavior.
+
 
 # 9. Technology Stack
 
@@ -514,9 +518,7 @@ Monitor business KPIs to detect regressions.
 
 
 [TODO]
-- Create diagrams for overall architecture items.
 - Review whole DOC.
 - Review whole requirements.
-- Structure the services like user management, payment, notifications, etc.
-- Correlation Ids for tracing requests across microservices.
-- KMS integration for sensitive data encryption.
+- Proposals for monitoring, continuous deployment.
+- Code examples or reference repository.
