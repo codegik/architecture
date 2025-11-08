@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0" version="28.2.9" pages="2">
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:144.0) Gecko/20100101 Firefox/144.0" version="28.2.9" pages="3">
   <diagram name="overall-architecture" id="GtfdfblwrIVel-trS7zu">
     <mxGraphModel dx="1119" dy="711" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -184,6 +184,57 @@
         </mxCell>
         <mxCell id="kl59JRyFxnrbATnPVD14-28" value="Third Party Service" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.traditional_server;" vertex="1" parent="1">
           <mxGeometry x="37" y="1185.5" width="45" height="78" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="traffic-protection" id="4ZnLdoqmgvFvWmYdMiVU">
+    <mxGraphModel dx="1519" dy="-89" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="LRz2l9Sck9UNUPFAarx_-0" />
+        <mxCell id="LRz2l9Sck9UNUPFAarx_-1" parent="LRz2l9Sck9UNUPFAarx_-0" />
+        <mxCell id="YevjmT6MK-DxkH9UvM5B-3" value="Fintech Infra" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;verticalAlign=top;align=left;fillColor=none;strokeColor=light-dark(#000000,#9B89FF);fontColor=light-dark(#000000,#9B89FF);" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="130" y="934" width="520" height="266" as="geometry" />
+        </mxCell>
+        <mxCell id="YevjmT6MK-DxkH9UvM5B-0" value="Application Layer" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;verticalAlign=top;align=left;fillColor=none;strokeColor=light-dark(#000000,#9B89FF);fontColor=light-dark(#000000,#9B89FF);" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="312" y="956" width="182" height="204" as="geometry" />
+        </mxCell>
+        <mxCell id="LRz2l9Sck9UNUPFAarx_-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="LRz2l9Sck9UNUPFAarx_-1" source="YevjmT6MK-DxkH9UvM5B-0" target="LRz2l9Sck9UNUPFAarx_-56">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="302" y="1224.5" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="LRz2l9Sck9UNUPFAarx_-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="LRz2l9Sck9UNUPFAarx_-1" source="LRz2l9Sck9UNUPFAarx_-56" target="LRz2l9Sck9UNUPFAarx_-57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="LRz2l9Sck9UNUPFAarx_-56" value="WAF Egress" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.waf_web_application_firewall;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="540" y="1019" width="88.83" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="LRz2l9Sck9UNUPFAarx_-57" value="Third Party Service" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.traditional_server;" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="698" y="1019" width="45" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="YevjmT6MK-DxkH9UvM5B-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="LRz2l9Sck9UNUPFAarx_-1" source="xGpUOY3arILFeW_QQeOK-0" target="xGpUOY3arILFeW_QQeOK-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="98.800048828125" y="1091.2999877929688" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="xGpUOY3arILFeW_QQeOK-0" value="Web" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#434445;aspect=fixed;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.vvd.web_browser;" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="-13" y="1022.5" width="100" height="71" as="geometry" />
+        </mxCell>
+        <mxCell id="YevjmT6MK-DxkH9UvM5B-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="LRz2l9Sck9UNUPFAarx_-1" source="xGpUOY3arILFeW_QQeOK-1" target="YevjmT6MK-DxkH9UvM5B-0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="xGpUOY3arILFeW_QQeOK-1" value="WAF Ingress" style="points=[];aspect=fixed;html=1;align=center;shadow=0;dashed=0;fillColor=#FF6A00;strokeColor=none;shape=mxgraph.alibaba_cloud.waf_web_application_firewall;verticalAlign=top;labelPosition=center;verticalLabelPosition=bottom;" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="170" y="1019" width="88.83" height="78" as="geometry" />
+        </mxCell>
+        <mxCell id="blbRR9bE_jMhU3vsNcxZ-0" value="Service1" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;prIcon=pod" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="381" y="985" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="YevjmT6MK-DxkH9UvM5B-1" value="Service2" style="aspect=fixed;sketch=0;html=1;dashed=0;whitespace=wrap;verticalLabelPosition=bottom;verticalAlign=top;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon2;prIcon=pod" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="381" y="1064" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="JfmHDj-_XE1pJvIi2Aod-0" value="Incoming &amp;amp; Outgoing Traffic Protection" style="rounded=0;whiteSpace=wrap;html=1;fontSize=24;" vertex="1" parent="LRz2l9Sck9UNUPFAarx_-1">
+          <mxGeometry x="-13" y="839" width="779" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

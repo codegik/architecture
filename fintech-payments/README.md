@@ -69,6 +69,8 @@ The fintech payment platform faces several critical challenges that must be addr
 - Physical Card Issuance.
 - Legacy System Backward Compatibility.
 - White-Label.
+- Design Frontend and Mobile Applications.
+- Migrate Existing Systems or databases.
 
 
 # 4. Principles [DONE]
@@ -86,9 +88,12 @@ The fintech payment platform faces several critical challenges that must be addr
 
 # 5. Overall Architecture
 
-![img-registration-flow.png](img-registration-flow.png)
+![img-registration-flow.png](diagrams/img-registration-flow.png)
 
 ## 5.1 Incoming & Outgoing Traffic Protection
+
+![img-traffic-protection.png](diagrams/img-traffic-protection.png)
+
 - All incoming requests from frontend clients MUST pass through AWS WAF (ingress) before reaching any backend service.
 - All outgoing requests to external third-party services (banks, payment gateways, credit card networks) MUST pass through AWS WAF (egress) for inspection and protection.
 
@@ -161,8 +166,52 @@ How can the architecture evolve to support new requirements, integrations, or in
 
 ## 5.3 CI/CD
 
-## 5.4 Use Cases
+## 5.4 Microservices 
 
+Here are the key microservices that make up the fintech payment platform:
+
+### Notification Service
+- Handles email and push notifications.
+- Integrates with Mailchimp for email and SNS for push notifications.
+- Integrates with SQS to queue notification requests.
+
+![img-notification-service.png](diagrams/img-notification-service.png)
+
+### Payment Service
+- Process payments between users.
+- Transaction validation and execution.
+- Integration with external payment gateways (banks, credit cards).
+- Payment idempotency handling.
+
+### Account Service
+- Manage user account balances
+- Account creation and status management
+- Multi-currency support (if needed)
+
+### Transaction Service
+- Record all financial transactions
+- Provide transaction history
+- Support audit trails and compliance
+
+### Statement Service
+- Generate financial statements and reports
+- Query transaction history
+- Export capabilities for users
+
+### Fraud Detection Service
+- Transaction risk scoring
+- Anomaly detection using ML
+- Velocity checks and unusual pattern detection
+
+### Integration Service
+- Manage external gateway integrations
+- Handle bank and credit card network communication
+- Retry logic and circuit breakers for external calls
+
+### Audit Service
+- Maintain immutable audit logs
+- Track all system operations
+- Support regulatory compliance and investigations
 
 # 6. Trade-offs [DONE]
 
@@ -312,10 +361,7 @@ Each tenant has isolated storage & caching components for data separation and pe
 - **Logging**: CloudWatch Logs
 
 
-# 7. Migrations [DONE]
-There is no migration needed for this project as it is being built from scratch.
-
-# 8. Testing strategy [DONE]
+# 7. Testing strategy [DONE]
 
 Before creating new tests, we should first ensure that the existing tests are running and passing.
 - Increase the coverage of existing integration/contract tests to 80% or more.
@@ -351,7 +397,7 @@ Before creating new tests, we should first ensure that the existing tests are ru
 - Execute in isolated production environment during low-traffic periods.
 
 
-# 9. Observability strategy [DONE]
+# 8. Observability strategy [DONE]
 
 Observability-based testing in production (also called "testing in production" or "production testing") uses monitoring, logging, and tracing data to validate system behavior after deployment.
 
@@ -385,7 +431,7 @@ Monitor business KPIs to detect regressions.
 - Payment success rate
 - Statement generation requests
 
-# 10. Technology Stack
+# 9. Technology Stack
 
 ## Backend Services [DONE]
 
@@ -444,7 +490,7 @@ Monitor business KPIs to detect regressions.
   - Verify WAF egress behavior when external calls are blocked.
 
 
-# 11. References
+# 10. References
 
 * Architecture Anti-Patterns: https://architecture-antipatterns.tech/
 * EIP https://www.enterpriseintegrationpatterns.com/
