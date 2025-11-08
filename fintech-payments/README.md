@@ -1,6 +1,6 @@
 # 1. Requirements
 
-## 1.1 Problem Statement and Context [DONE]
+## 1.1 Problem Statement and Context
 
 A fintech is developing a payment platform that will allow customers to:
 
@@ -14,7 +14,7 @@ A fintech is developing a payment platform that will allow customers to:
 The system must be multi-tenant, support rapid growth, and ensure high availability, auditability, and security of sensitive data.
 
 
-## 1.2 Problem space [DONE]
+## 1.2 Problem space
 
 The fintech payment platform faces several critical challenges that must be addressed in the architecture design:
 
@@ -52,7 +52,7 @@ The fintech payment platform faces several critical challenges that must be addr
 - The system must support notification by push and email. 
 
 
-# 2. Goals [DONE]
+# 2. Goals
 
 - Scalability: Design a scalable architecture.
 - Security: Ensure security best practices.
@@ -60,7 +60,7 @@ The fintech payment platform faces several critical challenges that must be addr
 - Auditability: Design for audit trails.
 - Multi-Tenancy: Isolate tenant data.
 
-# 3. Non-Goals [DONE]
+# 3. Non-Goals
 
 - Cryptocurrency or Blockchain Integration.
 - International Multi-Currency Support.
@@ -73,7 +73,7 @@ The fintech payment platform faces several critical challenges that must be addr
 - Migrate Existing Systems or databases.
 
 
-# 4. Principles [DONE]
+# 4. Principles
 
 - Security First: Prioritize security in every design decision.
 - API-First: Design APIs before implementation.
@@ -87,6 +87,9 @@ The fintech payment platform faces several critical challenges that must be addr
 - Performance: Optimize for critical paths without compromising consistency.
 
 # 5. Overall Architecture
+
+- This is microservices architecture deployed on AWS using EKS for container orchestration.
+- Communication between services is done via REST APIs or event-driven messaging.
 
 ![img-overall-architecture.png](diagrams/img-overall-architecture.png)
 
@@ -156,15 +159,24 @@ The fintech payment platform faces several critical challenges that must be addr
 - Token Expiry: 1 hour access token, 24 hour refresh token.
 
 
-## 5.6 Evolution plan
-How can the architecture evolve to support new requirements, integrations, or increased scalability in the future?
+## 5.4 Deployment
+
+### Deployment Multi Region
+- Deploy in multiple AWS regions (e.g., us-east-1, sa-east-1) for disaster recovery and low latency.
+- Use AWS Global Accelerator for global traffic routing to the nearest healthy region.
+
+![img-deployment-multi-region.png](diagrams/img-deployment-multi-region.png)
+
+### Deployment Single Region Multi AZ
+- Each region deploys EKS clusters across three availability zones (AZs) for high availability.
+- Use AWS Global Accelerator for global traffic routing to the nearest healthy region.
+
+![deployment-single-region.png](diagrams/deployment-single-region.png)
 
 
-## 5.2 Deployment
+## 5.5 CI/CD
 
-## 5.3 CI/CD
-
-## 5.4 Microservices 
+## 5.6 Microservices 
 
 Here are the key microservices that make up the fintech payment platform:
 
@@ -205,7 +217,7 @@ Here are the key microservices that make up the fintech payment platform:
 ![img-fraud-detection-service.png](diagrams/img-fraud-detection-service.png)
 
 
-### Audit Service
+### Audit Trail Service
 - Maintain immutable audit logs.
 - Track all system operations.
 - Support regulatory compliance and investigations.
@@ -213,7 +225,18 @@ Here are the key microservices that make up the fintech payment platform:
 
 ![img-audit-trail-service.png](diagrams/img-audit-trail-service.png)
 
-# 6. Trade-offs [DONE]
+
+## 5.7 Evolution plan
+This architecture is designed to evolve over time as new requirements emerge and the platform grows. Key strategies for evolution include:
+- Endorsing isolation: Each microservice is designed to be independent, allowing for easy updates, replacements, or additions without impacting other services.
+- API Gateway Extensions: Extend API Gateway with new routes and integrations as new services are added.
+- Database Scalability: Implement read replicas and sharding strategies for Aurora PostgreSQL as data volume grows.
+- Event-Driven Architecture: Leverage event streaming for asynchronous communication and integration with new external systems.
+- Cloud-Native Services: Continuously evaluate and adopt new AWS services that enhance scalability, security, and performance.
+- Monitoring and Observability: Expand monitoring capabilities to cover new services and components as the architecture evolves.
+
+
+# 6. Trade-offs
 
 ## Microservices vs Monolith
 
@@ -271,7 +294,7 @@ Here are the key microservices that make up the fintech payment platform:
 | **Scalability**                      | High – token approach scales with users                      | High – subdomain approach scales with DNS/tenant routing               | Both scale well, but subdomains require proper DNS and routing infrastructure                        |
 
 
-## 6.1 Major Decisions [DONE]
+## 6.1 Major Decisions
 
 ### Microservices vs Monolith
 - Choose Microservices.
@@ -298,7 +321,7 @@ Here are the key microservices that make up the fintech payment platform:
 - Since every request is tied to an authenticated identity + tenant_id, you get a clear audit trail (who accessed what, from which tenant).
 
 
-## 6.2 For each key major component [DONE]
+## 6.2 For each key major component
 
 ### CloudFront + S3
 - Amazon S3 stores static files (e.g., HTML, JS, CSS, media).
@@ -365,7 +388,7 @@ Each tenant has isolated storage & caching components for data separation and pe
 
 ![img-observability.png](diagrams/img-observability.png)
 
-# 7. Testing strategy [DONE]
+# 7. Testing strategy
 
 Before creating new tests, we should first ensure that the existing tests are running and passing.
 - Increase the coverage of existing integration/contract tests to 80% or more.
@@ -401,7 +424,7 @@ Before creating new tests, we should first ensure that the existing tests are ru
 - Execute in isolated production environment during low-traffic periods.
 
 
-# 8. Observability strategy [DONE]
+# 8. Observability strategy
 
 Observability-based testing in production (also called "testing in production" or "production testing") uses monitoring, logging, and tracing data to validate system behavior after deployment.
 
@@ -442,7 +465,7 @@ Monitor business KPIs to detect regressions.
 
 # 9. Technology Stack
 
-## Backend Services [DONE]
+## Backend Services
 
 ### Primary Language: Scala (Latest Stable Version)
   - Strong static typing for reliability.
@@ -466,7 +489,7 @@ Monitor business KPIs to detect regressions.
   - Helps with boilerplate code generation.
   - Assists in learning new libraries and frameworks.
 
-## Tests [DONE]
+## Tests
 
 ### K6: Performance Testing
   - Very easy to simulate scenarios.
@@ -520,5 +543,5 @@ Monitor business KPIs to detect regressions.
 [TODO]
 - Review whole DOC.
 - Review whole requirements.
-- Proposals for monitoring, continuous deployment.
+- continuous deployment.
 - Code examples or reference repository.
