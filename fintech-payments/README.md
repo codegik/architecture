@@ -147,7 +147,7 @@ The fintech payment platform faces several critical challenges that must be addr
 **LGPD Compliance**
 - Data Minimization: Only collect necessary data for financial transactions.
 - Consent Management: Explicit user opt-in with audit trail (purpose, timestamp, IP address).
-- Right to Access: API to export all user data (profile, transactions, statements).
+- Right to Access: API to export all user data (profile, transactions).
 - Right to Deletion: Anonymize financial records (compliance), delete non-essential data.
 - Data Retention: 5 years for transactions (regulatory), automated cleanup after expiration.
 
@@ -171,10 +171,12 @@ The fintech payment platform faces several critical challenges that must be addr
 - Each region deploys EKS clusters across three availability zones (AZs) for high availability.
 - Use AWS Global Accelerator for global traffic routing to the nearest healthy region.
 
-![deployment-single-region.png](diagrams/deployment-single-region.png)
+![deployment-single-region.png](diagrams/img-deployment-single-region.png)
 
 
 ## 5.5 CI/CD
+
+![img-ci-cd.png](diagrams/img-ci-cd.png)
 
 ## 5.6 Microservices 
 
@@ -211,7 +213,7 @@ Here are the key microservices that make up the fintech payment platform:
 **ML-based anomaly detection**
 - Use Debezium connectors to stream transaction data changes from Aurora PostgreSQL to Kafka topics.
 - Use Airflow and MLFlow to orchestrate periodic training jobs that consume transaction data from Kafka, train anomaly detection models, and store them in S3.
-- EMR clusters run Spark jobs to perform batch inference on recent transactions, scoring them for fraud risk.
+- EMR clusters run Spark jobs to perform inference on recent transactions, scoring them for fraud risk.
 - Fraud scores are written into Aurora PostgreSQL for real-time access by the Fraud Detection Service.
 
 ![img-fraud-detection-service.png](diagrams/img-fraud-detection-service.png)
@@ -224,6 +226,15 @@ Here are the key microservices that make up the fintech payment platform:
 - Use PGSync to sync data with OpenSearch for querying and analysis.
 
 ![img-audit-trail-service.png](diagrams/img-audit-trail-service.png)
+
+
+### Transaction Service
+- Record immutable transaction history for all payments.
+- Support financial statement generation.
+- Provide transaction query APIs (date range, amount, status).
+- Integration with Audit Trail Service for compliance.
+- Data retention policy (5 years per LGPD).
+- Support for transaction exports (CSV, PDF).
 
 
 ## 5.7 Evolution plan
@@ -337,8 +348,11 @@ This architecture is designed to evolve over time as new requirements emerge and
 - ALB distribute incoming requests to API Gateway.
 
 ### API Gateway (in each AZ)
-- Manages API requests.
+- Manages API requests for all microservices. Acts as a single entry point to expose endpoints.
 - Provides features like request validation, throttling, and routing to backend microservices.
+- Routing based on URL paths and HTTP methods to appropriate microservices.
+- Rate limiting per tenant to prevent abuse.
+- API versioning will be managed by microservices themselves.
 
 ### Keycloak Authorizer
 - Handles user authentication & authorization.
