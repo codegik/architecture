@@ -1,6 +1,4 @@
-# Architecture overview
-
-# 1 Challenge
+# 1. Requirements
 
 ## 1.1 Problem Statement and Context [DONE]
 
@@ -54,7 +52,7 @@ The fintech payment platform faces several critical challenges that must be addr
 - The system must support notification by push and email. 
 
 
-# 2 Goals [DONE]
+# 2. Goals [DONE]
 
 - Scalability: Design a scalable architecture.
 - Security: Ensure security best practices.
@@ -62,7 +60,7 @@ The fintech payment platform faces several critical challenges that must be addr
 - Auditability: Design for audit trails.
 - Multi-Tenancy: Isolate tenant data.
 
-# 3 Non-Goals [DONE]
+# 3. Non-Goals [DONE]
 
 - Cryptocurrency or Blockchain Integration.
 - International Multi-Currency Support.
@@ -73,7 +71,7 @@ The fintech payment platform faces several critical challenges that must be addr
 - White-Label.
 
 
-# 4 Principles [DONE]
+# 4. Principles [DONE]
 
 - Security First: Prioritize security in every design decision.
 - API-First: Design APIs before implementation.
@@ -86,15 +84,11 @@ The fintech payment platform faces several critical challenges that must be addr
 - Auditability: Maintain immutable audit logs.
 - Performance: Optimize for critical paths without compromising consistency.
 
-# 5 Overall Diagrams
-
-## 5.1 Overall architecture
-
-
+# 5. Overall Architecture
 
 ![img-registration-flow.png](img-registration-flow.png)
 
-### 5.1.1 Incoming & Outgoing Traffic Protection
+## 5.1 Incoming & Outgoing Traffic Protection
 - All incoming requests from frontend clients MUST pass through AWS WAF (ingress) before reaching any backend service.
 
 - All outgoing requests to external third-party services (banks, payment gateways, credit card networks) MUST pass through AWS WAF (egress) for inspection and protection.
@@ -135,7 +129,7 @@ The fintech payment platform faces several critical challenges that must be addr
   - Manual retry or customer contact for resolution
 
 
-### 5.1.2 Sensitive Data Protection & LGPD Compliance
+## 5.2 Sensitive Data Protection & LGPD Compliance
 
 **Data Encryption**
 - Encryption: TLS 1.3 for all communication.
@@ -148,25 +142,25 @@ The fintech payment platform faces several critical challenges that must be addr
 - Right to Deletion: Anonymize financial records (compliance), delete non-essential data.
 - Data Retention: 5 years for transactions (regulatory), automated cleanup after expiration.
 
-### 5.1.3 Authentication & Authorization
+## 5.3 Authentication & Authorization
 - Keycloak: OAuth2/OpenID Connect with JWT tokens.
 - MFA: Required for large transactions (>R$1000).
 - RBAC: Role-based permissions (user, admin, merchant).
 - Token Expiry: 1 hour access token, 24 hour refresh token.
 
-### 5.1.4 Fraud Detection
+## 5.4 Fraud Detection
 - Transaction Risk Scoring: Velocity checks, unusual amounts, new devices.
 - Anomaly Detection: ML-based predictions.
 - Thresholds: Block transactions >70 risk score, require MFA for >50.
 
-### 5.1.5 Audit
+## 5.5 Audit
 [TODO] 
 - Create diagrams for overall architecture items.
 - Review whole DOC.
 - Review whole requirements.
 - Structure the services like user management, payment, notifications, etc.
 
-### 5.1.6 Evolution plan
+## 5.6 Evolution plan
 How can the architecture evolve to support new requirements, integrations, or increased scalability in the future?
 
 ## 5.2 Deployment
@@ -324,10 +318,10 @@ Each tenant has isolated storage & caching components for data separation and pe
 - **Logging**: CloudWatch Logs
 
 
-# 7 Migrations [DONE]
+# 7. Migrations [DONE]
 There is no migration needed for this project as it is being built from scratch.
 
-# 8 Testing strategy [DONE]
+# 8. Testing strategy [DONE]
 
 Before creating new tests, we should first ensure that the existing tests are running and passing.
 - Increase the coverage of existing integration/contract tests to 80% or more.
@@ -363,7 +357,7 @@ Before creating new tests, we should first ensure that the existing tests are ru
 - Execute in isolated production environment during low-traffic periods.
 
 
-# 9 Observability strategy [DONE]
+# 9. Observability strategy [DONE]
 
 Observability-based testing in production (also called "testing in production" or "production testing") uses monitoring, logging, and tracing data to validate system behavior after deployment.
 
@@ -393,7 +387,7 @@ Here are the key approaches:
     - Payment success rate
     - Statement generation requests
 
-# 10 Technology Stack
+# 10. Technology Stack
 
 ## Backend Services [DONE]
 - **Primary Language**: Scala (Latest Stable Version)
@@ -444,7 +438,7 @@ Here are the key approaches:
   - Verify WAF egress behavior when external calls are blocked.
 
 
-# 11 References
+# 11. References
 
 * Architecture Anti-Patterns: https://architecture-antipatterns.tech/
 * EIP https://www.enterpriseintegrationpatterns.com/
