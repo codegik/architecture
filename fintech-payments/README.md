@@ -551,7 +551,4 @@ Monitor business KPIs to detect regressions.
 
 
 [TODO]
-- Review whole DOC.
 - Review whole requirements.
-- continuous deployment.
-- Code examples or reference repository.

@@ -699,7 +699,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="mLnVyemmGmrYairy6-8N" name="deployment-multi-region">
-    <mxGraphModel dx="1119" dy="711" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2602" dy="998" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -721,7 +721,7 @@
         <mxCell id="x4lRkPCAzyodyGjKkxXi-6" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="x4lRkPCAzyodyGjKkxXi-5">
           <mxGeometry x="19" y="44" width="159" height="41" as="geometry" />
         </mxCell>
-        <mxCell id="x4lRkPCAzyodyGjKkxXi-7" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="x4lRkPCAzyodyGjKkxXi-5">
+        <mxCell id="x4lRkPCAzyodyGjKkxXi-7" value="Payment Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="x4lRkPCAzyodyGjKkxXi-5">
           <mxGeometry x="19" y="97" width="159" height="41" as="geometry" />
         </mxCell>
         <mxCell id="x4lRkPCAzyodyGjKkxXi-8" value="Tenant Registration Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="x4lRkPCAzyodyGjKkxXi-5">
@@ -823,7 +823,7 @@
     </mxGraphModel>
   </diagram>
   <diagram name="deployment-single-region" id="KsV0rOlAXcmt1--bzu34">
-    <mxGraphModel dx="1119" dy="711" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2602" dy="998" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="bijJbZdDjnqrOYxtyGOp-0" />
         <mxCell id="bijJbZdDjnqrOYxtyGOp-1" parent="bijJbZdDjnqrOYxtyGOp-0" />
@@ -845,7 +845,7 @@
         <mxCell id="bijJbZdDjnqrOYxtyGOp-5" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="bijJbZdDjnqrOYxtyGOp-4">
           <mxGeometry x="19" y="44" width="159" height="41" as="geometry" />
         </mxCell>
-        <mxCell id="bijJbZdDjnqrOYxtyGOp-6" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="bijJbZdDjnqrOYxtyGOp-4">
+        <mxCell id="bijJbZdDjnqrOYxtyGOp-6" value="Payment Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="bijJbZdDjnqrOYxtyGOp-4">
           <mxGeometry x="19" y="97" width="159" height="41" as="geometry" />
         </mxCell>
         <mxCell id="bijJbZdDjnqrOYxtyGOp-7" value="Tenant Registration Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="bijJbZdDjnqrOYxtyGOp-4">
@@ -902,7 +902,7 @@
         <mxCell id="ai7-l8kcjovJDiAWZCQw-4" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-3">
           <mxGeometry x="19" y="44" width="159" height="41" as="geometry" />
         </mxCell>
-        <mxCell id="ai7-l8kcjovJDiAWZCQw-5" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-3">
+        <mxCell id="ai7-l8kcjovJDiAWZCQw-5" value="Payment Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-3">
           <mxGeometry x="19" y="97" width="159" height="41" as="geometry" />
         </mxCell>
         <mxCell id="ai7-l8kcjovJDiAWZCQw-6" value="Tenant Registration Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-3">
@@ -951,7 +951,7 @@
         <mxCell id="ai7-l8kcjovJDiAWZCQw-17" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-16">
           <mxGeometry x="19" y="44" width="159" height="41" as="geometry" />
         </mxCell>
-        <mxCell id="ai7-l8kcjovJDiAWZCQw-18" value="Notification Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-16">
+        <mxCell id="ai7-l8kcjovJDiAWZCQw-18" value="Payment Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-16">
           <mxGeometry x="19" y="97" width="159" height="41" as="geometry" />
         </mxCell>
         <mxCell id="ai7-l8kcjovJDiAWZCQw-19" value="Tenant Registration Service" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="ai7-l8kcjovJDiAWZCQw-16">

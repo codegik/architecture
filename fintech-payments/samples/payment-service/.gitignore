@@ -1,0 +1,45 @@
+# Payment Service - .gitignore
+
+# SBT specific
+target/
+project/target/
+project/project/
+lib_managed/
+src_managed/
+.history/
+.cache/
+.lib/
+dist/
+.bsp/
+
+# Scala-IDE specific
+.scala_dependencies
+.worksheet
+.idea/
+*.iml
+.idea_modules/
+
+# VS Code
+.vscode/
+.metals/
+.bloop/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Docker volumes
+postgres_data/
+
+# Temporary files
+*.tmp
+*.swp
+*~
+
