@@ -1,7 +1,7 @@
 package com.fintech.payment.service
 
 import com.fintech.payment.config.BatchConfig
-import com.fintech.payment.domain.{BatchStatistics, FraudCheckResult, FraudDecision, Payment, PaymentRequest, PaymentResponse, PaymentStatus}
+import com.fintech.payment.domain.{BatchStatistics, FraudCheckResult, FraudDecision, Payment, PaymentMethod, PaymentRequest, PaymentResponse, PaymentStatus}
 import com.fintech.payment.repository.PaymentRepository
 import zio.stream.ZStream
 import zio.{Chunk, Task, ZIO, ZLayer}
@@ -23,6 +23,25 @@ object PaymentService:
 
   def getPaymentById(id: UUID): ZIO[PaymentService, Throwable, Option[Payment]] =
     ZIO.serviceWithZIO[PaymentService](_.getPaymentById(id))
+
+  /** Generate test payment data for batch processing.
+    * 
+    * @param count Number of payment requests to generate
+    * @return Chunk of generated payment requests
+    */
+  def generatePaymentRequests(count: Int): Chunk[PaymentRequest] =
+    Chunk.fromIterable(
+      (1 to count).map { i =>
+        val tenantId = s"tenant_${(i % 10) + 1}" // 10 different tenants
+        PaymentRequest(
+          tenantId = tenantId,
+          senderAccountId = s"acc_sender_${i % 1000}",
+          receiverAccountId = s"acc_receiver_${(i + 500) % 1000}",
+          amount = BigDecimal(scala.util.Random.nextDouble() * 10000).setScale(2, BigDecimal.RoundingMode.HALF_UP),
+          paymentMethod = PaymentMethod.values(i % PaymentMethod.values.length)
+        )
+      }
+    )
 
 case class PaymentServiceLive(
   repository: PaymentRepository,
