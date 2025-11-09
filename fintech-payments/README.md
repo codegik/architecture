@@ -200,6 +200,7 @@ Here are the key microservices that make up the fintech payment platform:
 - Transaction validation and execution.
 - Integration with external payment gateways (banks, credit cards).
 - Payment idempotency handling.
+- Code sample here: [README.md](samples/payment-service/README.md)
 
 ![img-payment-service.png](diagrams/img-payment-service.png)
 
@@ -547,8 +548,3 @@ Monitor business KPIs to detect regressions.
 * Relational DB Patterns https://www.geeksforgeeks.org/design-patterns-for-relational-databases/
 * Rendering Patterns https://www.patterns.dev/vanilla/rendering-patterns/
 * REST API Design https://blog.stoplight.io/api-design-patterns-for-rest-web-services
-
-
-
-[TODO]
-- Review whole requirements.

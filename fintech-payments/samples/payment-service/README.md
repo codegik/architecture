@@ -13,7 +13,7 @@ A high-performance payment processing service built with **Java 25**, **Scala 3*
 - **Java 25**: Latest LTS version for performance and security
 - **Scala 3.4.3**: Modern Scala with improved syntax
 - **SBT 1.9.7**: Build tool for Scala projects
-- **ZIO 2.1.22**: Functional effect system for async/concurrent programming
+- **ZIO 2.0.19**: Functional effect system for async/concurrent programming
 - **ZIO Streams**: High-performance streaming for batch processing
 - **Quill**: Type-safe database queries with compile-time verification
 - **PostgreSQL 15**: Relational database with ACID guarantees
