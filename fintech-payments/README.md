@@ -404,35 +404,32 @@ Each tenant has isolated storage & caching components for data separation and pe
 
 # 7. Testing strategy
 
-Before creating new tests, we should first ensure that the existing tests are running and passing.
-- Increase the coverage of existing integration/contract tests to 80% or more.
-- We should not start the migration without having a good coverage of the existing contracts.
-- It will reduce the chances of breaking existing functionality during the migration.
-- The testes must run in developer environments and CI/CD pipeline.
-
 ## Contract tests
-- Test API contracts between decomposed microservices (User, Payment, etc.).
-- Verify WebSocket message formats and protocols.
+- Test API contracts between microservices (User, Payment, etc.).
+- Validate request/response formats, error handling, and edge cases.
+- Run as part of CI pipeline on every code change.
 
 ## Integration tests
 - Try to cover most of the scenarios, e.g. Tenant registration, Payment, Statement, etc.
-- Test WebSocket real-time communication flows.
 - Run in isolated environments before production deployment.
+- Use MockServer to simulate external payment gateways (banks, credit cards).
+- Run as part of CI pipeline on every code change.
 
 ## Infra tests
-- Test CloudFront edge caching effectiveness.
 - Validate Global Accelerator routing behavior.
+- Test WAF rules for blocking malicious requests.
+- Verify API Gateway rate limiting per tenant.
+- Check EKS cluster auto-scaling under load.
+- Ensure Aurora PostgreSQL failover and read replica functionality.
 
 ## Performance tests
 - Use K6 to simulate the user behavior and check the system's performance.
 - Measure database query performance under load.
-- Benchmark WebSocket vs HTTP performance in real usage scenarios.
 - Track CDN cache hit/miss ratios.
 - Execute in staging environment with production-like conditions.
 
 ## Chaos tests
 - Simulate AWS region failures to test Global Accelerator failover.
-- Test WebSocket reconnection strategies during network disruptions.
 - Inject latency between services to identify performance bottlenecks.
 - Verify system behavior during PGsync failures.
 - Execute in isolated production environment during low-traffic periods.
@@ -449,28 +446,27 @@ Collect features metrics (latency, counters, etc) continuously to validate criti
 
 ### Real User Monitoring 
 Track actual user interactions and performance metrics.
-- WebSocket connection success rates
-- Search result relevance and speed
-- Payment processing times
-- Statement generation times
+- Search result relevance and speed.
+- Payment processing times.
+- Statement generation times.
 
 ### Error Rate Monitoring
 Set up alerts for anomalies in.
-- WAF blocked requests and attack patterns (ingress and egress)
-- API Gateway 4xx/5xx errors
-- Authentication/authorization failures
-- Payment processing errors
-- Database connection failures
-- External gateway integration timeouts (bank APIs, credit cards)
-- WAF egress rule violations (unauthorized destinations)
+- WAF blocked requests and attack patterns (ingress and egress).
+- API Gateway 4xx/5xx errors.
+- Authentication/authorization failures.
+- Payment processing errors.
+- Database connection failures.
+- External gateway integration timeouts (bank APIs, credit cards).
+- WAF egress rule violations (unauthorized destinations).
 
 ### Business Metrics Validation
 Monitor business KPIs to detect regressions.
-- Product listing success rate
-- Search-to-purchase conversion
-- User session duration
-- Payment success rate
-- Statement generation requests
+- Product listing success rate.
+- Search-to-purchase conversion.
+- User session duration.
+- Payment success rate.
+- Statement generation requests.
 
 ### Trace Analysis
 - Correlation IDs to trace requests across microservices end-to-end.
@@ -512,21 +508,21 @@ Monitor business KPIs to detect regressions.
   - Native Grafana integration.
 
 ### ZIO Test: Official ZIO testing framework
-  - Type-safe assertions - Compile-time validation
-  - Resource management - Automatic cleanup with ZIO's scoped pattern
-  - Test aspects - Reusable cross-cutting concerns (timeout, retry, flaky)
-  - Native ZIO integration - No need for Await.result or blocking operations
-  - Parallel execution - Tests run concurrently by default
+  - Type-safe assertions - Compile-time validation.
+  - Resource management - Automatic cleanup with ZIO's scoped pattern.
+  - Test aspects - Reusable cross-cutting concerns (timeout, retry, flaky).
+  - Native ZIO integration - No need for Await.result or blocking operations.
+  - Parallel execution - Tests run concurrently by default.
 
 ### MockServer: API Mocking
-  - Faster Development - No waiting for external sandbox environments
-  - Better Test Coverage - Easily simulate edge cases and failures
-  - Parallel Testing - Tests don't interfere with each other
-  - Cost Savings - Avoid sandbox API call costs
-  - Reliability - Tests aren't affected by external API downtime
-  - Security Testing - Validate WAF egress rules safely
-  - Contract Validation - Ensure API integrations match specifications
-  - Debugging - Inspect all requests sent to external APIs
+  - Faster Development - No waiting for external sandbox environments.
+  - Better Test Coverage - Easily simulate edge cases and failures.
+  - Parallel Testing - Tests don't interfere with each other.
+  - Cost Savings - Avoid sandbox API call costs.
+  - Reliability - Tests aren't affected by external API downtime.
+  - Security Testing - Validate WAF egress rules safely.
+  - Contract Validation - Ensure API integrations match specifications.
+  - Debugging - Inspect all requests sent to external APIs.
 
 ### Toxiproxy: Network Simulation
   - Simulate real-world network failures (latency, timeouts, packet loss).
