@@ -9,7 +9,6 @@ import zio.{Chunk, Task, ZIO, ZLayer}
 import java.time.Instant
 import java.util.UUID
 
-// Payment Service - Core business logic
 trait PaymentService:
   def processBatch(requests: Chunk[PaymentRequest], batchId: String): Task[BatchStatistics]
   def processPayment(request: PaymentRequest): Task[PaymentResponse]
@@ -49,7 +48,7 @@ case class PaymentServiceLive(
                 ZIO.succeed(createFailedPayment(request, error.getMessage))
             }
         }
-        .grouped(batchConfig.batchInsertSize) // Group for batch inserts
+        .grouped(batchConfig.batchInsertSize)
         .mapZIO { chunk =>
           repository.insertBatch(chunk) *>
             ZIO.logDebug(s"Inserted batch of ${chunk.size} payments")
@@ -61,9 +60,8 @@ case class PaymentServiceLive(
 
       // Calculate statistics
       finalCount <- repository.countPayments()
-
-      successCount = requests.size // Simplified - in real impl, count actual successes
-      failCount = 0 // Simplified
+      successCount = requests.size
+      failCount = 0
       throughput = BigDecimal(requests.size) / BigDecimal(durationMs) * 1000
 
       stats = BatchStatistics(
@@ -108,16 +106,9 @@ case class PaymentServiceLive(
   // Internal processing logic
   private def processPaymentInternal(request: PaymentRequest): Task[Payment] =
     for
-      // Step 1: Validate payment (simplified)
       _ <- validatePayment(request)
-
-      // Step 2: Fraud detection check (simulated real-time ML scoring)
       fraudResult <- fraudService.checkFraud(request)
-
-      // Step 3: Determine payment status based on fraud decision
       status = determinePaymentStatus(fraudResult)
-
-      // Step 4: Create payment entity
       payment = Payment(
         id = UUID.randomUUID(),
         tenantId = request.tenantId,
@@ -130,7 +121,7 @@ case class PaymentServiceLive(
         paymentMethod = request.paymentMethod,
         fraudScore = fraudResult.score,
         fraudDecision = Some(fraudResult.decision),
-        externalGatewayId = None, // Would be set after gateway call
+        externalGatewayId = None,
         externalGatewayResponse = None,
         errorMessage = if status == PaymentStatus.FAILED then Some(s"Fraud check: ${fraudResult.reasons.mkString(", ")}") else None,
         createdAt = Instant.now(),
@@ -150,7 +141,7 @@ case class PaymentServiceLive(
   private def determinePaymentStatus(fraudResult: FraudCheckResult): PaymentStatus =
     fraudResult.decision match
       case FraudDecision.ALLOW => PaymentStatus.COMPLETED
-      case FraudDecision.CHALLENGE => PaymentStatus.PROCESSING // Would require MFA
+      case FraudDecision.CHALLENGE => PaymentStatus.PROCESSING
       case FraudDecision.BLOCK => PaymentStatus.FAILED
 
   private def createFailedPayment(request: PaymentRequest, errorMsg: String): Payment =

@@ -1,12 +1,11 @@
 package com.fintech.payment.repository
 
 import com.fintech.payment.domain.*
-import com.fintech.payment.config.DatabaseConfig
-import zio.*
 import io.getquill.*
-import io.getquill.jdbczio.Quill
-import java.util.UUID
+import zio.*
+
 import java.time.Instant
+import java.util.UUID
 import javax.sql.DataSource
 
 trait PaymentRepository:
@@ -54,11 +53,11 @@ case class PaymentRepositoryLive(dataSource: DataSource) extends PaymentReposito
   given MappedEncoding[String, PaymentMethod] = MappedEncoding[String, PaymentMethod](PaymentMethod.valueOf)
 
   // Quill schema mapping
-  inline def paymentSchema = quote {
+  private inline def paymentSchema = quote {
     querySchema[Payment]("payments")
   }
 
-  inline def batchStatsSchema = quote {
+  private inline def batchStatsSchema = quote {
     querySchema[BatchStatistics]("batch_statistics")
   }
 

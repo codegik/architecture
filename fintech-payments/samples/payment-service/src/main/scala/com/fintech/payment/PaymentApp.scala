@@ -4,14 +4,15 @@ import com.fintech.payment.domain.{PaymentMethod, PaymentRequest}
 import com.fintech.payment.config.{BatchConfig, DatabaseConfig}
 import com.fintech.payment.repository.{PaymentRepository, PaymentRepositoryLive}
 import com.fintech.payment.service.{FraudDetectionServiceLive, PaymentService, PaymentServiceLive}
-import zio.{Chunk, Clock, Console, ZIO, ZIOAppDefault, ZLayer}
+import zio.{Chunk, Clock, ZIO, ZIOAppDefault, ZLayer}
+import zio.Console.{printLine, printLineError}
 import javax.sql.DataSource
 import java.util.UUID
 
 object PaymentApp extends ZIOAppDefault:
 
   // Generate test payment data
-  def generatePaymentRequests(count: Int): Chunk[PaymentRequest] =
+  private def generatePaymentRequests(count: Int): Chunk[PaymentRequest] =
     Chunk.fromIterable(
       (1 to count).map { i =>
         val tenantId = s"tenant_${(i % 10) + 1}" // 10 different tenants
@@ -26,60 +27,59 @@ object PaymentApp extends ZIOAppDefault:
     )
 
   // Main batch processing program
-  def batchProcessingProgram: ZIO[PaymentService & PaymentRepository, Throwable, Unit] =
+  private def batchProcessingProgram(paymentCount: Int): ZIO[PaymentService & PaymentRepository, Throwable, Unit] =
     for
-      _ <- Console.printLine("=" * 80)
-      _ <- Console.printLine("🚀 Payment Service - High-Performance Batch Processing")
-      _ <- Console.printLine("=" * 80)
-      _ <- Console.printLine("")
+      _ <- printLine("=" * 80)
+      _ <- printLine("🚀 Payment Service - High-Performance Batch Processing")
+      _ <- printLine("=" * 80)
+      _ <- printLine("")
 
-      // Generate 1,000,000 payment requests
-      paymentCount = 1_000_000
-      _ <- Console.printLine(s"📝 Generating $paymentCount payment requests...")
+      // Generate payment requests
+      _ <- printLine(s"📝 Generating $paymentCount payment requests...")
       requests = generatePaymentRequests(paymentCount)
-      _ <- Console.printLine(s"✅ Generated ${requests.size} payment requests")
-      _ <- Console.printLine("")
+      _ <- printLine(s"✅ Generated ${requests.size} payment requests")
+      _ <- printLine("")
 
       // Process batch
       batchId = s"batch-${UUID.randomUUID()}"
-      _ <- Console.printLine(s"⚡ Starting batch processing: $batchId")
-      _ <- Console.printLine(s"   Parallelism: 16 streams")
-      _ <- Console.printLine(s"   Chunk size: 1000")
-      _ <- Console.printLine(s"   Batch insert size: 500")
-      _ <- Console.printLine("")
+      _ <- printLine(s"⚡ Starting batch processing: $batchId")
+      _ <- printLine(s"   Parallelism: 16 streams")
+      _ <- printLine(s"   Chunk size: 1000")
+      _ <- printLine(s"   Batch insert size: 500")
+      _ <- printLine("")
 
       startTime <- Clock.instant
       stats <- PaymentService.processBatch(requests, batchId)
       endTime <- Clock.instant
 
       // Display results
-      _ <- Console.printLine("")
-      _ <- Console.printLine("=" * 80)
-      _ <- Console.printLine("📊 BATCH PROCESSING RESULTS")
-      _ <- Console.printLine("=" * 80)
-      _ <- Console.printLine(s"Batch ID:              ${stats.batchId}")
-      _ <- Console.printLine(s"Tenant ID:             ${stats.tenantId}")
-      _ <- Console.printLine(s"Total Payments:        ${stats.totalPayments}")
-      _ <- Console.printLine(s"Successful:            ${stats.successfulPayments}")
-      _ <- Console.printLine(s"Failed:                ${stats.failedPayments}")
-      _ <- Console.printLine(s"Total Amount:          BRL ${stats.totalAmount}")
-      _ <- Console.printLine(s"Duration:              ${stats.durationMs.getOrElse(0L)}ms (${stats.durationMs.getOrElse(0L).toDouble / 1000.0}s)")
-      _ <- Console.printLine(s"Throughput:            ${stats.throughputPerSecond.map(_.setScale(2, BigDecimal.RoundingMode.HALF_UP)).getOrElse(0)} payments/second")
-      _ <- Console.printLine("=" * 80)
-      _ <- Console.printLine("")
+      _ <- printLine("")
+      _ <- printLine("=" * 80)
+      _ <- printLine("📊 BATCH PROCESSING RESULTS")
+      _ <- printLine("=" * 80)
+      _ <- printLine(s"Batch ID:              ${stats.batchId}")
+      _ <- printLine(s"Tenant ID:             ${stats.tenantId}")
+      _ <- printLine(s"Total Payments:        ${stats.totalPayments}")
+      _ <- printLine(s"Successful:            ${stats.successfulPayments}")
+      _ <- printLine(s"Failed:                ${stats.failedPayments}")
+      _ <- printLine(s"Total Amount:          BRL ${stats.totalAmount}")
+      _ <- printLine(s"Duration:              ${stats.durationMs.getOrElse(0L)}ms (${stats.durationMs.getOrElse(0L).toDouble / 1000.0}s)")
+      _ <- printLine(s"Throughput:            ${stats.throughputPerSecond.map(_.setScale(2, BigDecimal.RoundingMode.HALF_UP)).getOrElse(0)} payments/second")
+      _ <- printLine("=" * 80)
+      _ <- printLine("")
 
       // Verify data in database
-      _ <- Console.printLine("🔍 Verifying data in database...")
+      _ <- printLine("🔍 Verifying data in database...")
       totalCount <- PaymentRepository.countPayments()
-      _ <- Console.printLine(s"✅ Total payments in database: $totalCount")
-      _ <- Console.printLine("")
+      _ <- printLine(s"✅ Total payments in database: $totalCount")
+      _ <- printLine("")
 
-      _ <- Console.printLine("✅ Batch processing completed successfully!")
-      _ <- Console.printLine("")
+      _ <- printLine("✅ Batch processing completed successfully!")
+      _ <- printLine("")
     yield ()
 
   // DataSource layer using HikariCP
-  val dataSourceLayer: ZLayer[DatabaseConfig, Throwable, DataSource] =
+  private val dataSourceLayer: ZLayer[DatabaseConfig, Throwable, DataSource] =
     ZLayer.fromZIO {
       for
         config <- ZIO.service[DatabaseConfig]
@@ -97,7 +97,7 @@ object PaymentApp extends ZIOAppDefault:
     }
 
   // Complete application layer composition
-  val appLayer: ZLayer[Any, Throwable, PaymentService & PaymentRepository] =
+  private val appLayer: ZLayer[Any, Throwable, PaymentService & PaymentRepository] =
     ZLayer.make[PaymentService & PaymentRepository](
       DatabaseConfig.layer,
       BatchConfig.layer,
@@ -108,10 +108,10 @@ object PaymentApp extends ZIOAppDefault:
     )
 
   override def run: ZIO[Any, Throwable, Unit] =
-    batchProcessingProgram
+    batchProcessingProgram(paymentCount = 1_000_000)
       .provide(appLayer)
       .catchAll { error =>
-        Console.printLineError(s"❌ Error: ${error.getMessage}") *>
-          Console.printLineError(s"   Cause: ${error.getCause}") *>
+        printLineError(s"❌ Error: ${error.getMessage}") *>
+          printLineError(s"   Cause: ${error.getCause}") *>
           ZIO.fail(error)
       }
