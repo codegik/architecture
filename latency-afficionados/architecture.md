@@ -214,9 +214,6 @@ The user is capable of providing recommendation of products to users based on pr
      * May require changes to DNS and application architecture.
      * Some advanced routing features may not be as flexible as custom CDN or DNS solutions.
 
-## 🌏 7. For each key major component
-
-TBD
 
 ## 💾 8. Migrations
 
