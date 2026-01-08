@@ -470,4 +470,3 @@ Here are the key approaches:
 7. [X] Store concept 
 8. [X] Bundler module federation (don't need to use module federation)
 9. [X] Observability tests pos prod
-10. [ ] Migrate one domain and show how would work. Explain how will work two DBs.
