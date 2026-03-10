@@ -78,9 +78,14 @@ The usual suspects:
 If debugging is the process of removing bugs, then programming must be the process of adding them. Architecture is trying to make that process take longer.
 
 # How can we make it better?
-- Identify pain points from actual development work
-- Refactor incrementally, not big bang rewrites
-- Document decisions as you go
-- Make the architecture testable
-- Remove dead code and unused abstractions
-- Align team on patterns before implementing
+Start with what hurts. If nobody's complaining, maybe it's fine.
+
+Small steps beat grand visions. Refactor the thing that's slowing you down today, not the thing that might slow you down in 2027.
+
+Document why, not what. Code shows what. Comments and ADRs should explain why you made questionable life decisions.
+
+Delete more than you add. Every line of code is a liability. Every abstraction is a bet. Some bets don't pay off.
+
+Get the team on the same page before writing code, not after you've built it three different ways.
+
+Architecture isn't something you do once. It's something you do every day, in every PR, in every design discussion. It's a practice, not a phase.
