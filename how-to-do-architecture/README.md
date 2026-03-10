@@ -22,43 +22,60 @@ Onboarding new people? Make them fix a bug on day one. They'll learn your archit
 Architectural disagreements? Data wins. "I think" loses to "I deployed it and here's what happened." If you can't settle it, build both and see which one survives production.
 
 ## Evolution & Change
-- How do you evolve architecture without complete rewrites?
-- What signals tell you it's time to refactor or change architecture?
-- How do you manage technical debt while delivering features?
-- Strategies for handling legacy systems alongside new architecture
+Big rewrites are the architectural equivalent of "this time I'll really stick to my diet." Just start small. Strangler pattern exists because everyone learned the hard way.
+
+Time to refactor? When you're afraid to change code. When new features take 3x longer than they should. When developers start asking if they can work on "literally anything else."
+
+Technical debt is real debt: ignore it and it compounds. Pay a little every sprint or pay a lot when everything catches fire at 3am.
+
+Legacy systems are like old relatives: you can't get rid of them, but you can stop inviting them to everything. Build new stuff in the new way, migrate when it makes sense, not when it feels right.
 
 ## Practical Challenges
-- Monoliths vs microservices: when does complexity justify the split?
-- How do you validate architectural decisions early (prototyping, POCs)?
-- Balancing consistency across services vs team autonomy
-- How do you ensure non-functional requirements (security, performance, observability) are baked in?
+Monolith vs microservices? If you have 5 developers, you have a monolith. Don't let anyone tell you different. Microservices solve organizational problems, not technical ones. You earn them with pain, not with enthusiasm.
+
+POCs are supposed to be thrown away. If your POC is still running in production 18 months later, congratulations, that's just called development.
+
+Consistency vs autonomy is a false choice. Have standards for things that cross boundaries (auth, logging, errors). Let teams do whatever they want inside those boundaries.
+
+Security, performance, observability: these aren't features you add later. They're vegetables. Nobody gets excited about them, but you'll regret skipping them.
 
 ## Context-Specific
-- Does your architecture approach differ by project size, team size, or domain?
-- How do external constraints (budget, timeline, compliance) shape your architecture?
+A 3-person startup and a 300-person company have nothing in common architecturally. Stop copying Netflix's architecture when you have 100 users.
+
+Budget, timeline, compliance: these aren't constraints, they're reality. Architecture is the art of building the best system you can with what you actually have, not what you wish you had.
 
 
 # Do you read the code?
-- Yes, its the only way to check if the principals are been followed.
-- Essential for understanding actual implementation vs documented architecture
-- Code reveals patterns, coupling, dependencies that diagrams miss
-- Shows what's actually maintained vs abandoned
-- Critical for spotting architectural drift
+Yes. Always. Architecture lives in code, not slides.
+
+The diagram says "clean layers." The code says "everything imports everything." Guess which one is real?
+
+You can't spot architectural drift from a Confluence page. You spot it when you see 47 different ways to make an HTTP call.
+
+Reading code shows you what people actually do when nobody's watching. It's the difference between the menu and the kitchen.
 
 # Are you happy with the architecture? What do you look for?
-- Clear boundaries and responsibilities
-- Easy to locate where changes should happen
-- Tests reflect the architecture
-- Low cognitive load when navigating the codebase
-- Consistent patterns that don't require constant decisions
+Good architecture is invisible. You know it's good when nobody's complaining.
+
+Concrete signals:
+- New features go where they obviously belong, not "somewhere"
+- You can explain the system to someone in under 10 minutes
+- Tests don't require a PhD to write
+- Developers aren't playing "guess which service owns this logic"
+- Fixing a bug doesn't cascade into 8 other bugs
+
+Bad architecture makes easy things hard. Good architecture makes hard things possible.
 
 # What issues are you seeing?
-- God objects or classes doing too much
-- Circular dependencies
-- Tight coupling making changes risky
-- Inconsistent patterns across similar features
-- Missing abstractions or premature abstractions
-- Configuration scattered everywhere
+The usual suspects:
+- God classes that do everything except make coffee (actually, they probably do that too)
+- Circular dependencies that make you question your career choices
+- "Change this one field" requires touching 14 files across 3 repos
+- Every feature is implemented differently because "this time is special"
+- Abstraction layers that abstract nothing but make everything slower
+- Configuration in environment variables, config files, database, hardcoded constants, and Steve's head
+
+If debugging is the process of removing bugs, then programming must be the process of adding them. Architecture is trying to make that process take longer.
 
 # How can we make it better?
 - Identify pain points from actual development work
