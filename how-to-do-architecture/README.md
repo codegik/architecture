@@ -1,20 +1,25 @@
 # How do we handle Architecture?
 
 ## Goals and non goals
-- Architecture should have a purpose very well-defined.
-- We must know what we are solving and what we are should not do it.
-- This makes very clean purpose.
+Know what you're solving. If you can't explain it in one sentence, you're building a resume project.
+
+Architecture without constraints is just drawing boxes. Know what you're NOT solving too, or you'll end up with a distributed system when all you needed was a cron job.
 
 ## Decision-Making & Process
-- How do you decide when architecture needs upfront planning vs emergent design?
-- What frameworks do you use for making architectural trade-offs?
-- How do you capture and communicate architectural decisions (diagrams, documentation)?
-- When do you say "good enough" vs pursue the ideal solution?
+Upfront planning vs emergent design? Here's the test: if you're wrong, how expensive is it? Building a payment system? Plan. Building an internal admin panel? Just start coding.
+
+Trade-offs aren't made with frameworks, they're made at 2pm when your manager asks "can we ship Friday?" Everything is a beautiful, perfect system until someone mentions the deadline.
+
+ADRs are great until you realize nobody reads them six months later. Your architecture is what's in the code, not in that Miro board from 2023.
+
+"Good enough" is when it works and you can sleep at night. "Perfect" is what you tell yourself while your competitors ship features.
 
 ## Team Structure & Communication
-- How do you align stakeholders with different priorities on architectural direction?
-- How do you onboard new team members to existing architectural decisions?
-- How do you handle disagreements about architectural approaches?
+Aligning stakeholders is simple: show them what failure costs. Sales wants features, ops wants stability, and your CEO read about microservices on LinkedIn. Pick your battles.
+
+Onboarding new people? Make them fix a bug on day one. They'll learn your architecture faster than any wiki ever taught anyone anything.
+
+Architectural disagreements? Data wins. "I think" loses to "I deployed it and here's what happened." If you can't settle it, build both and see which one survives production.
 
 ## Evolution & Change
 - How do you evolve architecture without complete rewrites?
