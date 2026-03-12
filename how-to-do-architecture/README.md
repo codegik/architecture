@@ -50,21 +50,19 @@ Yes. Always. Architecture lives in code, not slides.
 
 The diagram says "clean layers." The code says "everything imports everything." Guess which one is real?
 
-You can't spot architectural drift from a Confluence page. You spot it when you see 47 different ways to make an HTTP call.
+You can't spot architectural flaws from a Confluence page. You spot it when you see 47 different ways to make an HTTP call.
 
 Reading code shows you what people actually do when nobody's watching. It's the difference between the menu and the kitchen.
 
 # Are you happy with the architecture? What do you look for?
-Good architecture is invisible. You know it's good when nobody's complaining.
-
 Concrete signals:
 - New features go where they obviously belong, not "somewhere"
 - You can explain the system to someone in under 10 minutes
 - Tests don't require a PhD to write
 - Developers aren't playing "guess which service owns this logic"
-- Fixing a bug doesn't cascade into 8 other bugs
+- Fixing a bug doesn't generate another 8 bugs
 
-Bad architecture makes easy things hard. Good architecture makes hard things possible.
+Good architecture is invisible. You know it's good when nobody's complaining.
 
 # What issues are you seeing?
 The usual suspects:
@@ -73,7 +71,7 @@ The usual suspects:
 - "Change this one field" requires touching 14 files across 3 repos
 - Every feature is implemented differently because "this time is special"
 - Abstraction layers that abstract nothing but make everything slower
-- Configuration in environment variables, config files, database, hardcoded constants, and Steve's head
+- Configuration in environment variables, config files, database, hardcoded constants
 
 If debugging is the process of removing bugs, then programming must be the process of adding them. Architecture is trying to make that process take longer.
 
