@@ -304,10 +304,13 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 * Implement clean API interfaces that will become external service contracts.
 * Establish data access patterns that will support service extraction.
 
+
 **Step 2: Data Separation**
 * Schema Isolation: Create separate database schemas for each service domain.
 * Data Migration: Move relevant tables to service-specific schemas.
-* Referential Integrity: Handle foreign key relationships across service boundaries.
+* Update the monolith to use Soft Foreign Keys before isolating the new schema.
+
+![img.migration.facade.png](img.migration.facade.png)
 
 **Step 3: Service Extraction**
 * Code Extraction: Move business logic from monolith to new Spring Boot microservice.
