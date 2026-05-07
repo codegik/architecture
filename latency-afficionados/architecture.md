@@ -482,6 +482,8 @@ When both monolith and service write the same data simultaneously:
   - Test API contracts between decomposed microservices (Product, User, Review, Order, etc.).
   - Verify WebSocket message formats and protocols.
   - Validate data synchronization contracts between PostgreSQL and OpenSearch.
+  - Verify event schema contracts between event publishers and consumers.
+  - Test event versioning compatibility.
 
 - Integration tests
   - Try to cover most of the scenarios, e.g. Uploading file, deleting file, searching file, updating metadata, etc.
@@ -507,6 +509,8 @@ When both monolith and service write the same data simultaneously:
   - Test WebSocket reconnection strategies during network disruptions
   - Inject latency between services to identify performance bottlenecks
   - Verify system behavior during PGsync failures
+  - Simulate EventBridge/event bus failures and verify DLQ processing
+  - Test event replay scenarios after consumer downtime
   - Execute in isolated production environment during low-traffic periods
 
 ## 👀 10. Observability strategy
@@ -534,6 +538,8 @@ Here are the key approaches:
   - OpenSearch query timeouts
   - Aurora PostgreSQL connection pool exhaustion
   - CloudFront 5xx errors
+  - Event processing failures and DLQ depth
+  - Event lag between publisher and consumer
 
 - **Business Metrics Validation**: Monitor business KPIs to detect regressions.
   - Product listing success rate
