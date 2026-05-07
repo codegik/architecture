@@ -285,9 +285,9 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 1. **Infrastructure Preparation**
 * Application Server Preparation: Configure container infrastructure, images, and orchestration (EKS).
 * API Gateway Configuration: Set up routing infrastructure to handle both monolith and microservice traffic.
-* Data Infrastructure: Deploy Aurora PostgreSQL clusters, OpenSearch instances, and monitoring tools.
+* Data Infrastructure: Deploy separate Aurora PostgreSQL clusters for each microservice, OpenSearch instances, and monitoring tools.
 * CI/CD Pipeline: Establish separate deployment pipelines for each future microservice.
-* Security & Networking: Configure VPC, security groups, IAM roles, and credentials.
+* Security & Networking: Configure VPC, security groups, IAM roles, and credentials for isolated database access per service.
 
 
 2. **Business Services implementation**
@@ -306,16 +306,19 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 
 
 **Step 2: Data Separation**
-* Schema Isolation: Create separate database schemas for each service domain.
-* Data Migration: Move relevant tables to service-specific schemas.
-* Update the monolith to use Soft Foreign Keys before isolating the new schema.
+* Database Isolation: Create separate Aurora PostgreSQL databases for each service domain to ensure true service autonomy and independent scaling.
+* Data Migration: Migrate relevant tables from monolith database to service-specific isolated databases.
+* Soft Foreign Keys: Update the monolith to use Soft Foreign Keys before data migration to remove hard database dependencies.
+* Cross-Service Data Access: Implement service APIs for any cross-service data requirements instead of database-level joins.
+
 
 ![img.migration.facade.png](img.migration.facade.png)
 
 **Step 3: Service Extraction**
 * Code Extraction: Move business logic from monolith to new Spring Boot microservice.
 * API Implementation: Implement REST APIs and WebSocket endpoints as needed.
-* Database Connection: Connect microservice to its dedicated database schema.
+* Database Connection: Connect microservice to its dedicated isolated Aurora PostgreSQL database.
+* Data Replication: During transition period, replicate necessary data from monolith database to service database until full cutover using event-driven replication.
 
 **Step 4: Traffic Routing**
 * Proxy Layer: Route specific API calls to new microservice while keeping others in monolith.
@@ -337,7 +340,8 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 
 #### Decommission Phase
 * Monolith Decommissioning: Gradually remove monolith components as services are extracted.
-* Database Cleanup: Remove unused tables and schemas from monolith database.
+* Database Cleanup: Remove migrated tables from monolith database as services complete cutover to their isolated databases.
+* Database Decommissioning: Shut down monolith Aurora cluster once all services have been extracted and are running on their own databases.
 * Toolchain Sunset: Decommission old CI/CD pipelines and infrastructure related to monolith.
 
 
@@ -433,9 +437,9 @@ Here are the key approaches:
 - **Migration Assistant**: GitHub Copilot
 
 ### Database & Search
-- **Primary Database**: Aurora PostgreSQL
+- **Primary Database**: Aurora PostgreSQL (separate isolated cluster per microservice)
 - **Search Engine**: OpenSearch
-- **Data Synchronization**: PGsync
+- **Data Synchronization**: PGsync (Aurora → OpenSearch per service)
 
 ### Observability & Monitoring
 - **Metrics Collection**: CloudWatch
