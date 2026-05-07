@@ -330,6 +330,125 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 * Event-Driven Communication: Use for asynchronous communication.
 * Circuit Breakers: Implement resilience patterns for service communication.
 
+#### Event-Driven Data Replication Strategy
+
+During the migration transition period, event-driven replication ensures data consistency between the monolith database and each microservice's isolated database.
+
+**Architecture Components:**
+
+* Event Bus: Amazon EventBridge or Amazon SNS/SQS for event routing
+* Event Publisher: Monolith publishes domain events when data changes
+* Event Consumer: New microservice consumes events and updates its own database
+* Event Store: Optional audit trail of all published events
+
+**Migration Flow:**
+
+**Phase 1: Setup Event Infrastructure (Week 1-2)**
+* Deploy EventBridge or SNS/SQS infrastructure
+* Configure event schemas for each service domain (User, Product, Review, Order, Comment)
+* Implement event publishing in monolith for critical operations
+* Set up monitoring and dead-letter queues for failed events
+
+**Phase 2: Initial Data Sync (Week 3-4)**
+* Perform one-time bulk data copy from monolith DB to service DB
+* Use AWS DMS or custom ETL job to seed service database
+* Verify data integrity and completeness
+* Enable event publishing in monolith
+
+**Phase 3: Read-Only Service with Event Sync (Week 5-8)**
+```
+Monolith (WRITE) --[publishes events]--> EventBridge --> Service (READ + consume events)
+     |                                                         |
+Monolith DB                                              Service DB (sync via events)
+```
+* Monolith publishes events on every data change (create, update, delete)
+* Service consumes events and updates its database to stay in sync
+* Service APIs handle read requests only
+* All write requests still routed to monolith
+* Monitor event lag and processing errors
+
+**Phase 4: Gradual Write Migration (Week 9-16)**
+```
+Monolith (WRITE) --[publishes events]--> EventBridge <-- Service (WRITE + publish events)
+     |                                        |                  |
+Monolith DB                            Both consume         Service DB (primary)
+                                       each other's events
+```
+* Service begins handling write requests (controlled by feature flags)
+* Service publishes events when it writes data
+* Monolith consumes service events to stay in sync
+* Bidirectional event flow ensures consistency
+* Gradually increase % of writes routed to service (10% → 50% → 100%)
+* Implement conflict resolution strategy (Service Wins by default)
+
+**Phase 5: Full Cutover (Week 17+)**
+```
+Monolith (retired) ----[stopped]----  EventBridge <-- Service (WRITE + publish events)
+                                           |                  |
+Monolith DB (archived)                Other services     Service DB (source of truth)
+```
+* 100% of traffic routed to new service
+* Service is the source of truth
+* Service continues publishing events for other services to consume
+* Monolith stops publishing events
+* Monolith database becomes read-only, then archived
+
+**Event Schema Design:**
+
+Each domain event follows this structure:
+```json
+{
+  "eventId": "uuid",
+  "eventType": "UserCreated | UserUpdated | UserDeleted",
+  "eventVersion": "1.0",
+  "timestamp": "ISO-8601",
+  "source": "monolith | user-service",
+  "aggregateId": "user-123",
+  "data": {
+    "userId": "user-123",
+    "email": "user@example.com",
+    "name": "John Doe",
+    "updatedFields": ["email", "name"]
+  },
+  "metadata": {
+    "correlationId": "request-id",
+    "causationId": "previous-event-id"
+  }
+}
+```
+
+**Event Types by Service:**
+
+* User Service: UserCreated, UserUpdated, UserDeleted, UserAuthenticated
+* Product Service: ProductListed, ProductUpdated, ProductDelisted, ProductPurchased
+* Review Service: ReviewCreated, ReviewUpdated, ReviewDeleted
+* Order Service: OrderCreated, OrderStatusChanged, OrderCompleted, OrderCancelled
+* Comment Service: CommentCreated, CommentUpdated, CommentDeleted
+
+**Conflict Resolution:**
+
+When both monolith and service write the same data simultaneously:
+* Timestamp-based: Latest event timestamp wins
+* Service Wins: New service's data takes precedence during migration
+* Idempotent Consumers: Services process events idempotently using event IDs
+* Manual Intervention: Alert ops team for critical conflicts via CloudWatch alarms
+
+**Error Handling:**
+
+* Dead Letter Queue: Failed events sent to DLQ for manual inspection
+* Retry Policy: Exponential backoff (3 retries max)
+* Circuit Breaker: Stop consuming events if error rate > 10%
+* Monitoring: Track event processing lag, error rate, DLQ depth
+
+**Benefits of Event-Driven Replication:**
+
+* Decoupled: Monolith doesn't directly call service database
+* Auditable: All data changes captured as events
+* Replayable: Can replay events to rebuild service database if needed
+* Scalable: Event bus handles high throughput
+* Consistent: Eventually consistent data across systems
+* Observable: Event flow visible in CloudWatch metrics
+
 #### Consolidation Phase
 * Performance Tuning: Optimize service performance based on observed metrics.
 * Documentation Update: Maintain up-to-date architecture and API documentation.
@@ -435,6 +554,8 @@ Here are the key approaches:
 - **Framework**: Spring Boot
 - **Build Tool**: Maven
 - **Migration Assistant**: GitHub Copilot
+- **Event Bus**: Amazon EventBridge (or SNS/SQS)
+- **Message Format**: JSON with versioned schemas
 
 ### Database & Search
 - **Primary Database**: Aurora PostgreSQL (separate isolated cluster per microservice)
