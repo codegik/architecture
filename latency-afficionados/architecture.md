@@ -334,6 +334,8 @@ Similar to the frontend migration, we'll use the Strangler Fig Pattern to gradua
 
 During the migration transition period, event-driven replication ensures data consistency between the monolith database and each microservice's isolated database.
 
+See detailed diagrams: [Event-Driven Replication Diagrams](event-driven-replication.md)
+
 **Architecture Components:**
 
 * Event Bus: Amazon EventBridge or Amazon SNS/SQS for event routing
