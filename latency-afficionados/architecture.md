@@ -350,8 +350,7 @@ During the migration transition period, event-driven replication ensures data co
 * Set up monitoring and dead-letter queues for failed events
 
 **Phase 2: Initial Data Sync**
-* Perform one-time bulk data copy from monolith DB to service DB
-* Use AWS DMS or custom ETL job to seed service database
+* Perform one-time bulk data copy from monolith DB to service DB using a backfill script or data migration tool
 * Verify data integrity and completeness
 * Enable event publishing in monolith
 
