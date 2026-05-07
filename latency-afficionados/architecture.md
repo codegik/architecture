@@ -343,19 +343,19 @@ During the migration transition period, event-driven replication ensures data co
 
 **Migration Flow:**
 
-**Phase 1: Setup Event Infrastructure (Week 1-2)**
+**Phase 1: Setup Event Infrastructure**
 * Deploy EventBridge or SNS/SQS infrastructure
 * Configure event schemas for each service domain (User, Product, Review, Order, Comment)
 * Implement event publishing in monolith for critical operations
 * Set up monitoring and dead-letter queues for failed events
 
-**Phase 2: Initial Data Sync (Week 3-4)**
+**Phase 2: Initial Data Sync**
 * Perform one-time bulk data copy from monolith DB to service DB
 * Use AWS DMS or custom ETL job to seed service database
 * Verify data integrity and completeness
 * Enable event publishing in monolith
 
-**Phase 3: Read-Only Service with Event Sync (Week 5-8)**
+**Phase 3: Read-Only Service with Event Sync**
 ```
 Monolith (WRITE) --[publishes events]--> EventBridge --> Service (READ + consume events)
      |                                                         |
@@ -367,7 +367,7 @@ Monolith DB                                              Service DB (sync via ev
 * All write requests still routed to monolith
 * Monitor event lag and processing errors
 
-**Phase 4: Gradual Write Migration (Week 9-16)**
+**Phase 4: Gradual Write Migration**
 ```
 Monolith (WRITE) --[publishes events]--> EventBridge <-- Service (WRITE + publish events)
      |                                        |                  |
@@ -381,7 +381,7 @@ Monolith DB                            Both consume         Service DB (primary)
 * Gradually increase % of writes routed to service (10% → 50% → 100%)
 * Implement conflict resolution strategy (Service Wins by default)
 
-**Phase 5: Full Cutover (Week 17+)**
+**Phase 5: Full Cutover**
 ```
 Monolith (retired) ----[stopped]----  EventBridge <-- Service (WRITE + publish events)
                                            |                  |
