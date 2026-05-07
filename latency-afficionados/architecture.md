@@ -417,22 +417,6 @@ Each domain event follows this structure:
 }
 ```
 
-**Event Types by Service:**
-
-* User Service: UserCreated, UserUpdated, UserDeleted, UserAuthenticated
-* Product Service: ProductListed, ProductUpdated, ProductDelisted, ProductPurchased
-* Review Service: ReviewCreated, ReviewUpdated, ReviewDeleted
-* Order Service: OrderCreated, OrderStatusChanged, OrderCompleted, OrderCancelled
-* Comment Service: CommentCreated, CommentUpdated, CommentDeleted
-
-**Conflict Resolution:**
-
-When both monolith and service write the same data simultaneously:
-* Timestamp-based: Latest event timestamp wins
-* Service Wins: New service's data takes precedence during migration
-* Idempotent Consumers: Services process events idempotently using event IDs
-* Manual Intervention: Alert ops team for critical conflicts via CloudWatch alarms
-
 **Error Handling:**
 
 * Dead Letter Queue: Failed events sent to DLQ for manual inspection
